@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {# ================= SEO ================= #}
+    {% set site_name = setting('site_name', 'amuï studio') %}
+    <title>{% block head_title %}{{ site_name }}{% endblock %}</title>
+    {% block seo %}{% endblock %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800;900&family=Lexend:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    {{ importmap('app') }}
+
+    {% if setting('analytics_id') %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ setting('analytics_id') }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ setting('analytics_id') }}');
+        </script>
+    {% endif %}
+</head>
+<body class="grain bg-paper font-body text-ink antialiased">
+
+{% if is_preview is defined and is_preview %}
+    <div class="fixed inset-x-0 bottom-0 z-[60] bg-amber-500 px-4 py-2 text-center text-sm font-bold text-white">
+        Prévisualisation — cette page est en brouillon et n'est pas visible publiquement.
+    </div>
+{% endif %}
+
+{# ================= Header ================= #}
+{% set header_links = nav_items('header')|filter(i => not i.isButton) %}
+{% set header_ctas = nav_items('header')|filter(i => i.isButton) %}
+
+<header class="stack border-b border-ink/15">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
+        <a href="{{ path('front_homepage') }}"
+           class="group inline-flex items-baseline gap-1 font-display text-lg font-black tracking-tight transition-colors duration-200 hover:text-accent"
+           aria-label="{{ site_name }} — Retour à l'accueil">
+            {% if setting('logo_url') %}
+                <img src="{{ setting('logo_url') }}" alt="{{ site_name }}" class="h-8 w-auto">
+            {% else %}
+                <span>{{ site_name }}</span>
+            {% endif %}
+        </a>
+
+        <nav aria-label="Navigation principale">
+            <ul class="flex items-center gap-6 text-sm font-medium">
+                {% for item in header_links %}
+                    <li>
+                        <a class="transition-colors duration-200 hover:text-accent focus:text-accent" href="{{ item.url }}">{{ item.label }}</a>
+                    </li>
+                {% endfor %}
+                {% for item in header_ctas %}
+                    <li>
+                        <a class="inline-flex items-center justify-center border border-ink bg-ink px-4 py-2 text-sm font-semibold text-paper transition-colors duration-200 hover:border-accent hover:bg-accent" href="{{ item.url }}">{{ item.label }}</a>
+                    </li>
+                {% endfor %}
+
+                {# Sélecteur de langue (si la page a des traductions publiées) #}
+                {% if page is defined %}
+                    {% set translations = page_translations(page) %}
+                    {% if translations|length > 1 %}
+                        <li class="flex items-center gap-1.5 text-sm font-medium uppercase">
+                            {% for t in translations %}
+                                {% if t.locale == page.locale %}
+                                    <span aria-current="true">{{ t.locale }}</span>
+                                {% else %}
+                                    <a class="opacity-50 transition-colors duration-200 hover:text-accent hover:opacity-100" href="{{ page_path(t) }}" hreflang="{{ t.locale }}">{{ t.locale }}</a>
+                                {% endif %}
+                                {{ not loop.last ? '/' }}
+                            {% endfor %}
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</header>
+
+{# ================= Contenu ================= #}
+<main id="contenu" class="stack">
+    {% block body %}{% endblock %}
+</main>
+
+{# ================= Footer ================= #}
+<footer class="stack border-t border-ink/15">
+    <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:items-end">
+            <div>
+                <div class="font-display text-lg font-black tracking-tight">{{ site_name }}</div>
+                <div class="mt-3 space-y-1 text-sm text-ink/70">
+                    {% if setting('contact_email') %}
+                        <div><a class="transition-colors duration-200 hover:text-accent" href="mailto:{{ setting('contact_email') }}">{{ setting('contact_email') }}</a></div>
+                    {% endif %}
+                    {% if setting('phone') %}
+                        <div><a class="transition-colors duration-200 hover:text-accent" href="tel:{{ setting('phone')|replace({' ': ''}) }}">{{ setting('phone') }}</a></div>
+                    {% endif %}
+                    {% for item in nav_items('footer') %}
+                        <div><a class="transition-colors duration-200 hover:text-accent" href="{{ item.url }}">{{ item.label }}</a></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if setting('linkedin') or setting('instagram') or setting('facebook') %}
+                <div class="sm:text-right">
+                    <div class="text-xs font-semibold uppercase tracking-widest text-ink/70">Réseaux</div>
+                    <div class="mt-4 flex items-center gap-4 sm:justify-end">
+                        {% for network, icon in {'linkedin': 'linkedin', 'instagram': 'instagram', 'facebook': 'facebook'} %}
+                            {% if setting(network) %}
+                                <a class="inline-flex items-center gap-2 border border-ink px-3 py-2 text-sm font-semibold transition-colors duration-200 hover:border-accent hover:text-accent"
+                                   href="{{ setting(network) }}" target="_blank" rel="noopener" aria-label="{{ network|capitalize }}">
+                                    <i data-lucide="{{ icon }}" class="h-4 w-4"></i>
+                                    <span class="hidden sm:inline">{{ network|capitalize }}</span>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mt-10 flex items-center justify-between border-t border-ink/15 pt-6">
+            <p class="text-xs text-ink/55">© <span id="year"></span> {{ setting('footer_text', site_name) }}</p>
+            <a href="#contenu" class="text-xs font-semibold transition-colors duration-200 hover:text-accent">Haut de page</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* =========================================================
+   Thème amuï studio — minimalisme radical
+   ink / paper / accent, Lexend + Inter, angles droits
+   ========================================================= */
+@theme {
+    --color-ink: #000000;
+    --color-paper: #FFFFFF;
+    --color-accent: #E11D48;
+
+    --font-display: "Lexend", "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-admin: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+    /* Tokens du framework (kit) — utilisés par les gabarits communs
+       ajoutés lors de la mise à niveau : actualités, maintenance, etc.
+       Neutres, n'affectent pas les blocs propres à amuï (ink/paper/accent). */
+    --color-sand: #FFFFFF;
+    --color-forest: #000000;
+    --color-sage: #E11D48;
+    --color-ink-soft: #1F1F1F;
+    --color-earth: #9F1239;
+    --color-line: #E5E5E5;
+
+    --radius-journal: 0.15rem;
+    --shadow-soft: 0 16px 48px rgba(0, 0, 0, 0.10);
+}
+
+:root {
+    color-scheme: light;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+}
+
+a, button, input, textarea, select {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Grain papier subtil en overlay */
+.grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.06;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+}
+
+/* Contenu au-dessus du grain */
+.stack {
+    position: relative;
+    z-index: 1;
+}
+
+/* Focus visible sans ombres */
+:focus-visible {
+    outline: 2px solid #e11d48;
+    outline-offset: 2px;
+}
+
+/* Logotype hero : s'adapte au viewport, passe accent au survol */
+.hero-mark {
+    width: min(88vw, 11.5rem);
+    height: auto;
+    color: #000000;
+    transition: color 200ms ease;
+}
+
+@media (min-width: 640px) {
+    .hero-mark { width: min(72vw, 14rem); }
+}
+
+@media (min-width: 1024px) {
+    .hero-mark { width: min(100%, 17.5rem); }
+}
+
+.hero-mark-wrap:hover .hero-mark,
+.hero-mark-wrap:focus-within .hero-mark {
+    color: #e11d48;
+}
+
+/* Contenu HTML libre (bloc texte) */
+.prose-cms h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.02em; margin: 1.5em 0 0.5em; }
+.prose-cms h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; letter-spacing: -0.02em; margin: 1.2em 0 0.4em; }
+.prose-cms p { margin: 0.75em 0; line-height: 1.7; }
+.prose-cms a { text-decoration: underline; text-underline-offset: 2px; }
+.prose-cms a:hover { color: var(--color-accent); }
+.prose-cms ul, .prose-cms ol { margin: 0.75em 0; padding-left: 1.4em; }
+.prose-cms ul { list-style: disc; }
+.prose-cms ol { list-style: decimal; }
+.prose-cms li { margin: 0.3em 0; }

@@ -1,0 +1,38 @@
+<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %} class="border-t border-ink/15">
+    <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+        {% if data.title %}
+            <div class="flex items-end justify-between gap-6">
+                <h2 class="font-display text-3xl font-black tracking-tight sm:text-4xl">{{ data.title }}</h2>
+            </div>
+        {% endif %}
+
+        {% if data.projects|length > 0 %}
+            <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+                {% for project in data.projects %}
+                    <a href="{{ project.url|default('#') ?: '#' }}"
+                       {% if project.url|default('') starts with 'http' %}target="_blank" rel="noopener noreferrer"{% endif %}
+                       class="group relative overflow-hidden border border-ink transition-colors duration-200 hover:border-accent focus:border-accent"
+                       aria-label="Projet : {{ project.title|default('') }}">
+                        {% if project.image|default('') %}
+                            <div class="aspect-[16/10] bg-paper">
+                                <img src="{{ project.image }}" alt="{{ project.image_alt|default('Aperçu du projet ' ~ project.title|default('')) }}"
+                                     class="h-full w-full object-cover" loading="lazy" referrerpolicy="no-referrer">
+                            </div>
+                        {% endif %}
+                        <div class="flex items-center justify-between px-5 py-4">
+                            <div>
+                                <div class="font-display text-lg font-black tracking-tight transition-colors duration-200 group-hover:text-accent group-focus:text-accent">
+                                    {{ project.title|default('') }}
+                                </div>
+                                {% if project.meta|default('') %}
+                                    <div class="mt-1 text-xs text-ink/70">{{ project.meta }}</div>
+                                {% endif %}
+                            </div>
+                            <span class="text-xs font-semibold text-ink/70 transition-colors duration-200 group-hover:text-accent group-focus:text-accent">Voir</span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
