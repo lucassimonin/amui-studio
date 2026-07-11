@@ -17,6 +17,7 @@ class SettingsAdminController extends AbstractController
         'site_name' => ['Nom du site', 'Utilisé dans le titre des pages et les emails'],
         'tagline' => ['Slogan', 'Suffixe du meta title (ex: Concept restaurant au Marché du Lez)'],
         'logo_url' => ['Logo (URL)', 'Collez une URL depuis la bibliothèque Médias'],
+        'favicon_url' => ['Favicon (URL)', 'Icône de l\'onglet du navigateur — idéalement un PNG/ICO carré (32×32 ou 48×48), depuis la bibliothèque Médias'],
         'contact_email' => ['Email de contact', 'Destinataire par défaut du formulaire de contact'],
         'mailer_from' => ['Email expéditeur', 'Adresse "from" des emails envoyés par le site'],
         'phone' => ['Téléphone', ''],
