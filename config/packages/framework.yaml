@@ -4,6 +4,12 @@ framework:
     http_method_override: false
     handle_all_throwables: true
 
+    # Derrière le reverse proxy partagé : on fait confiance aux en-têtes
+    # X-Forwarded-* du proxy (réseaux Docker privés) pour détecter HTTPS et
+    # l'hôte réel. Sans effet en local/mono-site (aucun en-tête transféré).
+    trusted_proxies: 'private_ranges'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix']
+
     session:
         handler_id: null
         cookie_secure: auto

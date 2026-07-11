@@ -1,0 +1,59 @@
+# =============================================================================
+# Déploiement DERRIÈRE le reverse proxy partagé (voir ../proxy/).
+# L'app sert en HTTP interne (pas de TLS ici) ; le proxy possède 80/443 + TLS.
+#
+#   docker network create web    # une seule fois (partagé avec le proxy)
+#   cp .env.prod.dist .env.prod  # SERVER_NAME=:80 + DEFAULT_URI=https://<domaine>
+#   docker compose --env-file .env.prod -f compose.proxy.yaml up -d --build
+# =============================================================================
+
+services:
+  app:
+    build:
+      context: .
+      target: prod
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      SERVER_NAME: ${SERVER_NAME:-:80}    # HTTP interne : le proxy gère le TLS
+      APP_ENV: prod
+      APP_DEBUG: 0
+      APP_SECRET: ${APP_SECRET:?APP_SECRET est requis}
+      DATABASE_URL: "mysql://${MYSQL_USER:-cms}:${MYSQL_PASSWORD:?MYSQL_PASSWORD est requis}@database:3306/${MYSQL_DATABASE:-cms_starter}?serverVersion=8.0.32&charset=utf8mb4"
+      MAILER_DSN: ${MAILER_DSN:?MAILER_DSN est requis}
+      DEFAULT_URI: "${DEFAULT_URI:?DEFAULT_URI requis, ex https://amui.mondomaine.fr}"
+      AUTO_DB_SETUP: ${AUTO_DB_SETUP:-schema}
+      LOAD_FIXTURES: ${LOAD_FIXTURES:-0}
+    volumes:
+      - media_data:/app/public/uploads/media   # médias uploadés (persistants)
+    networks:
+      default: {}          # pour joindre sa base MySQL
+      web:
+        aliases:
+          - amui-app        # nom par lequel le proxy joint cette app
+
+  database:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD est requis}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-cms_starter}
+      MYSQL_USER: ${MYSQL_USER:-cms}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD est requis}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+networks:
+  web:
+    external: true
+
+volumes:
+  db_data:
+  media_data:
