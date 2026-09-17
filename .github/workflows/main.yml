@@ -1,0 +1,41 @@
+name: Deploy
+ 
+# Se déclenche APRÈS le workflow "CI" existant, uniquement s'il a réussi sur
+# main : les tests/lint gardent donc le déploiement, sans dupliquer la CI.
+# Déclenchement manuel aussi possible (workflow_dispatch).
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+ 
+concurrency:
+  group: deploy-amui-studio
+  cancel-in-progress: false
+ 
+jobs:
+  deploy:
+    name: Deploy to server
+    runs-on: ubuntu-latest
+    # Déploie si la CI a réussi, ou si lancement manuel.
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || '22' }}
+          command_timeout: 40m
+          script: |
+            set -euo pipefail
+            cd "${{ secrets.DEPLOY_PATH }}"
+            COMPOSE_FILE="${{ secrets.DEPLOY_COMPOSE_FILE || 'compose.prod.yaml' }}"
+            echo "→ Réseau partagé du proxy (no-op s'il n'est pas utilisé)"
+            docker network create web 2>/dev/null || true
+            echo "→ Déploiement amuï studio (make prod.deploy, fichier: $COMPOSE_FILE)"
+            make prod.deploy PROD_FILE="$COMPOSE_FILE"
+            echo "✓ Déploiement terminé"
+ 
