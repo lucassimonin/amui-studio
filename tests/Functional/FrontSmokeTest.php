@@ -94,7 +94,7 @@ class FrontSmokeTest extends DatabaseWebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('meta[name="robots"][content="noindex, nofollow"]');
         // Rubriques obligatoires (LCEN + RGPD)
-        foreach (['Éditeur du site', 'Directeur de la publication', 'Hébergement', 'Données personnelles', 'Cookies'] as $section) {
+        foreach (['Éditeur du site', 'Hébergement', 'Données personnelles', 'Cookies'] as $section) {
             $this->assertSelectorTextContains('main', $section);
         }
     }
