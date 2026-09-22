@@ -72,10 +72,10 @@ function initCollections() {
             const html = collection.dataset.prototype.replace(/__name__/g, index++);
             const item = document.createElement('div');
             item.setAttribute('data-collection-item', '');
-            item.className = 'relative rounded-lg border border-stone-200 bg-stone-50/80 p-4 pt-9';
+            item.className = 'relative rounded-none border border-ink/15 bg-ink/5/80 p-4 pt-9';
             item.innerHTML =
-                '<button type="button" data-collection-remove class="absolute right-3 top-3 text-xs font-semibold text-stone-400 transition hover:text-red-600">Retirer</button>' +
-                '<span data-collection-handle class="absolute left-3 top-3 cursor-grab select-none text-stone-400 transition hover:text-stone-700" title="Glisser pour réordonner" aria-hidden="true">⠿</span>' +
+                '<button type="button" data-collection-remove class="absolute right-3 top-3 text-xs font-semibold text-ink/45 transition hover:text-accent">Retirer</button>' +
+                '<span data-collection-handle class="absolute left-3 top-3 cursor-grab select-none text-ink/45 transition hover:text-ink/75" title="Glisser pour réordonner" aria-hidden="true">⠿</span>' +
                 html;
             items.appendChild(item);
             collection.dataset.index = String(index);
@@ -169,7 +169,7 @@ function initMediaPicker() {
         e.preventDefault();
 
         targetInput = btn.closest('[data-media-field]')?.querySelector('input');
-        grid.innerHTML = '<p class="col-span-full py-6 text-center text-sm text-stone-400">Chargement…</p>';
+        grid.innerHTML = '<p class="col-span-full py-6 text-center text-sm text-ink/45">Chargement…</p>';
         dialog.showModal();
 
         try {
@@ -177,14 +177,14 @@ function initMediaPicker() {
             grid.innerHTML = '';
 
             if (!medias.length) {
-                grid.innerHTML = '<p class="col-span-full py-6 text-center text-sm text-stone-400">Bibliothèque vide — importez des images via « Importer de nouvelles images ».</p>';
+                grid.innerHTML = '<p class="col-span-full py-6 text-center text-sm text-ink/45">Bibliothèque vide — importez des images via « Importer de nouvelles images ».</p>';
                 return;
             }
 
             medias.forEach((media) => {
                 const card = document.createElement('button');
                 card.type = 'button';
-                card.className = 'group overflow-hidden rounded-xl border border-stone-200 text-left transition hover:border-emerald-600';
+                card.className = 'group overflow-hidden rounded-none border border-ink/15 text-left transition hover:border-accent';
 
                 const img = document.createElement('img');
                 img.src = media.thumb;
@@ -194,7 +194,7 @@ function initMediaPicker() {
 
                 const name = document.createElement('span');
                 name.textContent = media.name;
-                name.className = 'block truncate px-2.5 py-2 text-[11px] font-semibold text-stone-600 group-hover:text-emerald-700';
+                name.className = 'block truncate px-2.5 py-2 text-[11px] font-semibold text-ink/65 group-hover:text-accent';
 
                 card.append(img, name);
                 card.addEventListener('click', () => {
@@ -207,7 +207,7 @@ function initMediaPicker() {
                 grid.appendChild(card);
             });
         } catch {
-            grid.innerHTML = '<p class="col-span-full py-6 text-center text-sm text-red-600">Erreur de chargement de la bibliothèque.</p>';
+            grid.innerHTML = '<p class="col-span-full py-6 text-center text-sm text-accent">Erreur de chargement de la bibliothèque.</p>';
         }
     });
 
@@ -249,7 +249,7 @@ function initRichTextEditors() {
 function toast(message, isError = false) {
     const container = document.getElementById('flashes') || document.body;
     const el = document.createElement('div');
-    el.className = `rounded-xl px-4 py-3 text-sm font-medium text-white shadow-xl ${isError ? 'bg-red-600' : 'bg-stone-900'}`;
+    el.className = `rounded-none px-4 py-3 text-sm font-medium text-paper shadow-none ${isError ? 'bg-accent' : 'bg-ink'}`;
     el.textContent = message;
     container.appendChild(el);
     setTimeout(() => {

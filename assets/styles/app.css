@@ -24,6 +24,10 @@
     --color-earth: #9F1239;
     --color-line: #E5E5E5;
 
+    /* Fond de l'interface d'administration (opaque : les couches translucides
+       laissaient passer le fond sombre du navigateur). */
+    --color-canvas: #F3F3F1;
+
     --radius-journal: 0.15rem;
     --shadow-soft: 0 16px 48px rgba(0, 0, 0, 0.10);
 }

@@ -4,7 +4,7 @@
   <div class="mb-4">
     {{- form_label(form) -}}
     {{- form_widget(form) -}}
-    {%- if form.vars.help -%}<p class="mt-1 text-xs text-stone-400">{{ form.vars.help }}</p>{%- endif -%}
+    {%- if form.vars.help -%}<p class="mt-1 text-xs text-ink/45">{{ form.vars.help }}</p>{%- endif -%}
     {{- form_errors(form) -}}
   </div>
 {%- endblock -%}
@@ -12,22 +12,22 @@
 {%- block form_label -%}
   {%- if label is not same as(false) -%}
     {%- if label is empty -%}{%- set label = name|humanize -%}{%- endif -%}
-    <label {% if id is defined %}for="{{ id }}"{% endif %} class="mb-1.5 block text-[13px] font-semibold text-stone-700">{{ label }}</label>
+    <label {% if id is defined %}for="{{ id }}"{% endif %} class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-ink/55">{{ label }}</label>
   {%- endif -%}
 {%- endblock -%}
 
 {%- block form_widget_simple -%}
-  {%- set attr = attr|merge({class: (attr.class|default('') ~ ' block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/15')|trim}) -%}
+  {%- set attr = attr|merge({class: (attr.class|default('') ~ ' block w-full rounded-none border border-ink/25 bg-paper px-3 py-2.5 text-sm text-ink outline-none transition focus:border-accent')|trim}) -%}
   {{- parent() -}}
 {%- endblock -%}
 
 {%- block textarea_widget -%}
-  {%- set attr = attr|merge({class: (attr.class|default('') ~ ' block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/15')|trim}) -%}
+  {%- set attr = attr|merge({class: (attr.class|default('') ~ ' block w-full rounded-none border border-ink/25 bg-paper px-3 py-2.5 text-sm text-ink outline-none transition focus:border-accent')|trim}) -%}
   {{- parent() -}}
 {%- endblock -%}
 
 {%- block choice_widget_collapsed -%}
-  {%- set attr = attr|merge({class: (attr.class|default('') ~ ' block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 outline-none transition focus:border-emerald-600')|trim}) -%}
+  {%- set attr = attr|merge({class: (attr.class|default('') ~ ' block w-full rounded-none border border-ink/30 bg-paper px-3 py-2 text-sm text-ink outline-none transition focus:border-accent')|trim}) -%}
   {{- parent() -}}
 {%- endblock -%}
 
@@ -35,21 +35,21 @@
   <div class="mb-4 flex items-start gap-2.5">
     {{- form_widget(form) -}}
     <div>
-      <label for="{{ form.vars.id }}" class="text-[13px] font-semibold text-stone-700">{{ form.vars.label ?: form.vars.name|humanize }}</label>
-      {%- if form.vars.help -%}<p class="text-xs text-stone-400">{{ form.vars.help }}</p>{%- endif -%}
+      <label for="{{ form.vars.id }}" class="text-[13px] font-semibold text-ink/75">{{ form.vars.label ?: form.vars.name|humanize }}</label>
+      {%- if form.vars.help -%}<p class="text-xs text-ink/45">{{ form.vars.help }}</p>{%- endif -%}
     </div>
     {{- form_errors(form) -}}
   </div>
 {%- endblock -%}
 
 {%- block checkbox_widget -%}
-  {%- set attr = attr|merge({class: (attr.class|default('') ~ ' mt-0.5 h-4 w-4 rounded border-stone-300 accent-emerald-700')|trim}) -%}
+  {%- set attr = attr|merge({class: (attr.class|default('') ~ ' mt-0.5 h-4 w-4 rounded border-ink/30 accent-accent')|trim}) -%}
   {{- parent() -}}
 {%- endblock -%}
 
 {%- block form_errors -%}
   {%- if errors|length > 0 -%}
-    <ul class="mt-1 text-xs font-medium text-red-600">
+    <ul class="mt-1 text-xs font-medium text-accent">
       {%- for error in errors -%}<li>{{ error.message }}</li>{%- endfor -%}
     </ul>
   {%- endif -%}
@@ -60,7 +60,7 @@
   <div data-media-field class="flex gap-2">
     {{- block('form_widget_simple') -}}
     <button type="button" data-media-picker
-            class="shrink-0 rounded-lg border border-stone-300 px-3.5 py-2 text-xs font-bold text-stone-600 transition hover:border-emerald-600 hover:text-emerald-700">
+            class="shrink-0 rounded-none border border-ink/30 px-3.5 py-2 text-xs font-bold text-ink/65 transition hover:border-accent hover:text-accent">
       Parcourir
     </button>
   </div>
@@ -68,20 +68,20 @@
 
 {# Éditeur de texte riche (contenteditable synchronisé avec le textarea, admin.js) #}
 {%- block rich_text_editor_widget -%}
-  <div data-rte class="overflow-hidden rounded-lg border border-stone-300 bg-white">
-    <div class="flex flex-wrap gap-1 border-b border-stone-200 bg-stone-50 px-2 py-1.5">
-      <button type="button" data-rte-cmd="formatBlock:h2" class="rounded px-2 py-1 text-xs font-bold text-stone-600 hover:bg-stone-200" title="Titre">H2</button>
-      <button type="button" data-rte-cmd="formatBlock:h3" class="rounded px-2 py-1 text-xs font-bold text-stone-600 hover:bg-stone-200" title="Sous-titre">H3</button>
-      <button type="button" data-rte-cmd="formatBlock:p" class="rounded px-2 py-1 text-xs font-bold text-stone-600 hover:bg-stone-200" title="Paragraphe">¶</button>
-      <span class="mx-1 w-px bg-stone-200"></span>
-      <button type="button" data-rte-cmd="bold" class="rounded px-2 py-1 text-xs font-black text-stone-600 hover:bg-stone-200" title="Gras">G</button>
-      <button type="button" data-rte-cmd="italic" class="rounded px-2 py-1 text-xs font-bold italic text-stone-600 hover:bg-stone-200" title="Italique">I</button>
-      <span class="mx-1 w-px bg-stone-200"></span>
-      <button type="button" data-rte-cmd="insertUnorderedList" class="rounded px-2 py-1 text-xs font-bold text-stone-600 hover:bg-stone-200" title="Liste à puces">• Liste</button>
-      <button type="button" data-rte-cmd="insertOrderedList" class="rounded px-2 py-1 text-xs font-bold text-stone-600 hover:bg-stone-200" title="Liste numérotée">1. Liste</button>
-      <span class="mx-1 w-px bg-stone-200"></span>
-      <button type="button" data-rte-cmd="createLink" class="rounded px-2 py-1 text-xs font-bold text-stone-600 hover:bg-stone-200" title="Insérer un lien">Lien</button>
-      <button type="button" data-rte-cmd="removeFormat" class="rounded px-2 py-1 text-xs font-bold text-stone-400 hover:bg-stone-200" title="Effacer la mise en forme">Effacer</button>
+  <div data-rte class="overflow-hidden rounded-none border border-ink/30 bg-paper">
+    <div class="flex flex-wrap gap-1 border-b border-ink/15 bg-ink/5 px-2 py-1.5">
+      <button type="button" data-rte-cmd="formatBlock:h2" class="rounded px-2 py-1 text-xs font-bold text-ink/65 hover:bg-ink/15" title="Titre">H2</button>
+      <button type="button" data-rte-cmd="formatBlock:h3" class="rounded px-2 py-1 text-xs font-bold text-ink/65 hover:bg-ink/15" title="Sous-titre">H3</button>
+      <button type="button" data-rte-cmd="formatBlock:p" class="rounded px-2 py-1 text-xs font-bold text-ink/65 hover:bg-ink/15" title="Paragraphe">¶</button>
+      <span class="mx-1 w-px bg-ink/15"></span>
+      <button type="button" data-rte-cmd="bold" class="rounded px-2 py-1 text-xs font-black text-ink/65 hover:bg-ink/15" title="Gras">G</button>
+      <button type="button" data-rte-cmd="italic" class="rounded px-2 py-1 text-xs font-bold italic text-ink/65 hover:bg-ink/15" title="Italique">I</button>
+      <span class="mx-1 w-px bg-ink/15"></span>
+      <button type="button" data-rte-cmd="insertUnorderedList" class="rounded px-2 py-1 text-xs font-bold text-ink/65 hover:bg-ink/15" title="Liste à puces">• Liste</button>
+      <button type="button" data-rte-cmd="insertOrderedList" class="rounded px-2 py-1 text-xs font-bold text-ink/65 hover:bg-ink/15" title="Liste numérotée">1. Liste</button>
+      <span class="mx-1 w-px bg-ink/15"></span>
+      <button type="button" data-rte-cmd="createLink" class="rounded px-2 py-1 text-xs font-bold text-ink/65 hover:bg-ink/15" title="Insérer un lien">Lien</button>
+      <button type="button" data-rte-cmd="removeFormat" class="rounded px-2 py-1 text-xs font-bold text-ink/45 hover:bg-ink/15" title="Effacer la mise en forme">Effacer</button>
     </div>
     <div data-rte-area contenteditable="true" class="rte-area min-h-40 max-h-[32rem] overflow-y-auto px-4 py-3 text-sm outline-none"></div>
     <div class="hidden">{{ block('textarea_widget') }}</div>
@@ -97,15 +97,15 @@
   <div {{ block('widget_container_attributes') }}>
     <div data-collection-items class="space-y-3">
       {%- for child in form -%}
-        <div data-collection-item class="relative rounded-lg border border-stone-200 bg-stone-50/80 p-4 pt-9">
-          <button type="button" data-collection-remove class="absolute right-3 top-3 text-xs font-semibold text-stone-400 transition hover:text-red-600">Retirer</button>
-          <span data-collection-handle class="absolute left-3 top-3 cursor-grab select-none text-stone-400 transition hover:text-stone-700" title="Glisser pour réordonner" aria-hidden="true">⠿</span>
+        <div data-collection-item class="relative rounded-none border border-ink/15 bg-ink/5/80 p-4 pt-9">
+          <button type="button" data-collection-remove class="absolute right-3 top-3 text-xs font-semibold text-ink/45 transition hover:text-accent">Retirer</button>
+          <span data-collection-handle class="absolute left-3 top-3 cursor-grab select-none text-ink/45 transition hover:text-ink/75" title="Glisser pour réordonner" aria-hidden="true">⠿</span>
           {{ form_widget(child) }}
         </div>
       {%- endfor -%}
     </div>
     {%- if prototype is defined -%}
-      <button type="button" data-collection-add class="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-stone-300 px-3 py-2 text-xs font-semibold text-stone-500 transition hover:border-emerald-600 hover:text-emerald-700">
+      <button type="button" data-collection-add class="mt-3 inline-flex items-center gap-1.5 rounded-none border border-dashed border-ink/30 px-3 py-2 text-xs font-semibold text-ink/55 transition hover:border-accent hover:text-accent">
         + Ajouter un élément
       </button>
     {%- endif -%}
