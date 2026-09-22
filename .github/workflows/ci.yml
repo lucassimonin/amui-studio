@@ -32,6 +32,10 @@ jobs:
       - name: Assets (importmap)
         run: php bin/console importmap:install
 
+      # Chaque page appelle styles/app.css : sans CSS compilé, les tests fonctionnels échouent
+      - name: Tailwind
+        run: php bin/console tailwind:build
+
       - name: Lint Twig / YAML / Container
         run: |
           php bin/console lint:twig templates

@@ -45,9 +45,9 @@ class AppFixtures extends Fixture
     {
         $settings = [
             'site_name' => 'amuï studio',
-            'tagline' => "Créateurs d'expériences digitales",
-            'contact_email' => 'hello@amui.studio',
-            'mailer_from' => 'no-reply@amui.studio',
+            'tagline' => 'Sites web & applications sur mesure',
+            'contact_email' => 'hello@amui.fr',
+            'mailer_from' => 'no-reply@amui.fr',
             'phone' => '+33 6 00 00 00 00',
             'footer_text' => 'amuï studio. Minimalisme radical.',
             'linkedin' => 'https://www.linkedin.com/',
@@ -99,34 +99,54 @@ class AppFixtures extends Fixture
             ->setSlug('accueil')
             ->setIsHomepage(true)
             ->setStatus(Page::STATUS_PUBLISHED)
-            ->setMetaTitle('amuï studio — Portfolio')
-            ->setMetaDescription("amuï studio — Créateurs d'expériences digitales. Portfolio one page minimaliste.")
+            ->setMetaTitle('amuï studio — Sites web & applications')
+            ->setMetaDescription("amuï studio — Sites web et applications sur mesure : design minimal, développement web et mobile, SEO.")
             ->setStructuredData(json_encode([
                 '@context' => 'https://schema.org',
                 '@type' => 'Organization',
                 'name' => 'amuï studio',
-                'description' => "Studio digital : direction artistique, design système, front-end créatif.",
-                'email' => 'hello@amui.studio',
+                'description' => "Studio digital : sites web et applications sur mesure, direction artistique, design système, développement web et mobile.",
+                'email' => 'hello@amui.fr',
                 'telephone' => '+33600000000',
-                'url' => 'https://amui.studio',
+                'url' => 'https://amui.fr',
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
         $blocks = [
-            ['hero_split', [
-                'title' => 'amuï studio :',
-                'title_line2' => "Créateurs d'expériences digitales.",
-                'text' => "Design minimal, systèmes clairs, interfaces qui vont droit au but. Le contraste est une signature — l'efficacité, une obsession.",
+            ['hero_trema', [
+                'wordmark' => 'amuï',
+                'label_left' => 'Studio digital',
+                'label_center' => 'Sites · Applications · SEO',
+                'statement' => 'Sites web & applications sur mesure.',
+                'text' => "Du site vitrine à l'application web ou mobile : design minimal, systèmes clairs, interfaces qui vont droit au but.",
                 'primary_label' => 'Démarrer un projet',
                 'primary_link' => '#contact',
                 'secondary_label' => 'Voir les projets',
                 'secondary_link' => '#projets',
-                'image' => '',
-                'image_alt' => 'Logotype amuï studio',
+                'stat_value' => '06',
+                'stat_label' => 'projets livrés',
+                'stat_link' => '#projets',
             ]],
             ['project_grid', [
                 'anchor' => 'projets',
+                'index' => '01',
                 'title' => 'Projets',
                 'projects' => [
+                    [
+                        'image' => '/images/projets/noma.webp',
+                        'image_alt' => 'Aperçu du site de Noma, DJ et producteur',
+                        'title' => 'Noma',
+                        'meta' => 'DJ · Portfolio artiste · Booking',
+                        'year' => '2026',
+                        'url' => 'https://dj-noma.netlify.app',
+                    ],
+                    [
+                        'image' => '/images/projets/ludorules.webp',
+                        'image_alt' => 'Aperçu du site Ludorules, catalogue de jeux de cartes et de dés',
+                        'title' => 'Ludorules',
+                        'meta' => 'Application web · Catalogue de jeux · Trilingue',
+                        'year' => '',
+                        'url' => 'https://ludorules.com',
+                    ],
                     [
                         'image' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80',
                         'image_alt' => "Aperçu du projet L'Atelier Plomberie",
@@ -159,18 +179,20 @@ class AppFixtures extends Fixture
             ]],
             ['split_intro', [
                 'anchor' => 'agence',
+                'index' => '02',
                 'title' => "L'Agence",
                 'subtitle' => 'Studio digital. Direction artistique, design système, front-end créatif.',
                 'statement' => "Le minimalisme au service de l'efficacité.",
                 'text' => "Nous construisons des expériences digitales structurées, rapides, et lisibles — du concept à l'interface. Chaque élément doit justifier sa présence. Rien de plus.",
-                'boxes' => "Design | Identité · UI System · Typographie\nDéveloppement | Front-end · Performance · Accessibilité",
+                'boxes' => "Design | Identité · UI System · Typographie\nDéveloppement | Sites · Applications web & mobile · Performance\nSEO | Référencement · Données structurées · Visibilité locale\nMaintenance | Mises à jour · Sécurité · Sauvegardes",
             ]],
             ['contact_simple', [
                 'anchor' => 'contact',
+                'index' => '03',
                 'title' => 'Contact',
                 'text' => "Un message clair, une réponse rapide. Dites-nous ce que vous voulez faire — on vous dira comment le faire bien.",
-                'infos_label' => 'Infos',
-                'email' => 'hello@amui.studio',
+                'infos_label' => 'Écrivez-nous',
+                'email' => 'hello@amui.fr',
                 'phone' => '+33 6 00 00 00 00',
                 'form_note' => 'En envoyant, vous acceptez un retour par email.',
                 'recipient' => '',
@@ -197,34 +219,54 @@ class AppFixtures extends Fixture
             ->setTranslationGroup($frenchHomepage->getTranslationGroup())
             ->setIsHomepage(true)
             ->setStatus(Page::STATUS_PUBLISHED)
-            ->setMetaTitle('amuï studio — Portfolio')
-            ->setMetaDescription('amuï studio — crafting digital experiences. A minimalist one-page portfolio.')
+            ->setMetaTitle('amuï studio — Websites & apps')
+            ->setMetaDescription('amuï studio — custom websites and apps: minimal design, web and mobile development, SEO.')
             ->setStructuredData(json_encode([
                 '@context' => 'https://schema.org',
                 '@type' => 'Organization',
                 'name' => 'amuï studio',
-                'description' => 'Digital studio: art direction, design systems, creative front-end.',
-                'email' => 'hello@amui.studio',
+                'description' => 'Digital studio: custom websites and apps, art direction, design systems, web and mobile development.',
+                'email' => 'hello@amui.fr',
                 'telephone' => '+33600000000',
-                'url' => 'https://amui.studio',
+                'url' => 'https://amui.fr',
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
         $blocks = [
-            ['hero_split', [
-                'title' => 'amuï studio:',
-                'title_line2' => 'Crafting digital experiences.',
-                'text' => 'Minimal design, clear systems, interfaces that get straight to the point. Contrast is a signature — efficiency, an obsession.',
+            ['hero_trema', [
+                'wordmark' => 'amuï',
+                'label_left' => 'Digital studio',
+                'label_center' => 'Websites · Apps · SEO',
+                'statement' => 'Custom websites & apps.',
+                'text' => 'From showcase websites to web and mobile apps: minimal design, clear systems, interfaces that get straight to the point.',
                 'primary_label' => 'Start a project',
                 'primary_link' => '#contact',
                 'secondary_label' => 'See projects',
                 'secondary_link' => '#projets',
-                'image' => '',
-                'image_alt' => 'amuï studio logotype',
+                'stat_value' => '06',
+                'stat_label' => 'projects shipped',
+                'stat_link' => '#projets',
             ]],
             ['project_grid', [
                 'anchor' => 'projets',
+                'index' => '01',
                 'title' => 'Projects',
                 'projects' => [
+                    [
+                        'image' => '/images/projets/noma.webp',
+                        'image_alt' => 'Preview of the website of Noma, DJ and producer',
+                        'title' => 'Noma',
+                        'meta' => 'DJ · Artist portfolio · Booking',
+                        'year' => '2026',
+                        'url' => 'https://dj-noma.netlify.app',
+                    ],
+                    [
+                        'image' => '/images/projets/ludorules.webp',
+                        'image_alt' => 'Preview of Ludorules, a catalogue of card and dice games',
+                        'title' => 'Ludorules',
+                        'meta' => 'Web app · Game catalogue · Trilingual',
+                        'year' => '',
+                        'url' => 'https://ludorules.com',
+                    ],
                     [
                         'image' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80',
                         'image_alt' => "Preview of the L'Atelier Plomberie project",
@@ -257,18 +299,20 @@ class AppFixtures extends Fixture
             ]],
             ['split_intro', [
                 'anchor' => 'agence',
+                'index' => '02',
                 'title' => 'The Studio',
                 'subtitle' => 'Digital studio. Art direction, design systems, creative front-end.',
                 'statement' => 'Minimalism in the service of efficiency.',
                 'text' => 'We build structured, fast and legible digital experiences — from concept to interface. Every element must justify its presence. Nothing more.',
-                'boxes' => "Design | Identity · UI System · Typography\nDevelopment | Front-end · Performance · Accessibility",
+                'boxes' => "Design | Identity · UI System · Typography\nDevelopment | Websites · Web & mobile apps · Performance\nSEO | Search · Structured data · Local visibility\nMaintenance | Updates · Security · Backups",
             ]],
             ['contact_simple', [
                 'anchor' => 'contact',
+                'index' => '03',
                 'title' => 'Contact',
                 'text' => "A clear message, a quick reply. Tell us what you want to do — we'll tell you how to do it well.",
-                'infos_label' => 'Info',
-                'email' => 'hello@amui.studio',
+                'infos_label' => 'Write to us',
+                'email' => 'hello@amui.fr',
                 'phone' => '+33 6 00 00 00 00',
                 'form_note' => 'By sending this, you agree to a reply by email.',
                 'recipient' => '',
@@ -297,7 +341,7 @@ class AppFixtures extends Fixture
         $block->setType('rich_text')->setPosition(0)->setData([
             'kicker' => '',
             'title' => 'Mentions légales',
-            'content' => "<h2>Éditeur du site</h2>\n<p>amuï studio — hello@amui.studio.</p>\n<h2>Hébergement</h2>\n<p>À compléter.</p>\n<h2>Données personnelles</h2>\n<p>Les informations transmises via le formulaire de contact sont utilisées uniquement pour répondre à votre demande.</p>",
+            'content' => "<h2>Éditeur du site</h2>\n<p>Le site amui.fr est édité par amuï studio, <mark>[à compléter : statut juridique, ex. entreprise individuelle / SAS au capital de …]</mark>.</p>\n<ul>\n<li>Responsable : <mark>[à compléter : nom et prénom]</mark></li>\n<li>Adresse : <mark>[à compléter : adresse postale du siège]</mark></li>\n<li>SIRET : <mark>[à compléter : numéro SIRET]</mark></li>\n<li>TVA intracommunautaire : <mark>[à compléter : numéro, ou « TVA non applicable, art. 293 B du CGI »]</mark></li>\n<li>Email : <a href=\"mailto:hello@amui.fr\">hello@amui.fr</a></li>\n<li>Téléphone : <mark>[à compléter : numéro]</mark></li>\n</ul>\n<h2>Directeur de la publication</h2>\n<p><mark>[à compléter : nom et prénom du directeur de la publication]</mark></p>\n<h2>Hébergement</h2>\n<p><mark>[à compléter : nom de l’hébergeur, adresse et téléphone]</mark></p>\n<h2>Propriété intellectuelle</h2>\n<p>L’ensemble des contenus de ce site (textes, logotype, éléments graphiques, mise en page) est la propriété d’amuï studio, sauf mention contraire. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>\n<p>Les visuels des projets présentés dans le portfolio restent la propriété de leurs titulaires respectifs et sont reproduits à titre de références.</p>\n<h2>Données personnelles</h2>\n<p>Les informations transmises via le formulaire de contact (nom, email, sujet, message) sont utilisées uniquement pour répondre à votre demande. Elles sont destinées à amuï studio et ne sont ni cédées ni revendues.</p>\n<p>Responsable du traitement : amuï studio. Base légale : votre demande de contact. Durée de conservation : <mark>[à compléter : durée, ex. 3 ans après le dernier échange]</mark>.</p>\n<p>Conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés, vous disposez d’un droit d’accès, de rectification, d’effacement, d’opposition, de limitation et de portabilité de vos données. Pour l’exercer, écrivez à <a href=\"mailto:hello@amui.fr\">hello@amui.fr</a>. Vous pouvez également introduire une réclamation auprès de la CNIL (<a href=\"https://www.cnil.fr\">cnil.fr</a>).</p>\n<h2>Cookies</h2>\n<p>Ce site ne dépose aucun cookie publicitaire ni de mesure d’audience. Seul un cookie technique de session est utilisé pour sécuriser le formulaire de contact ; il est strictement nécessaire au fonctionnement du site et ne requiert pas de consentement.</p>\n<h2>Crédits</h2>\n<p>Conception, design et développement : amuï studio.</p>",
         ]);
         $page->addBlock($block);
 

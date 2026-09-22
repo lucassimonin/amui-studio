@@ -1,0 +1,15 @@
+{#
+    En-tête de section amuï : [ numéro ] en accent, grand titre, note discrète à droite.
+    Variables : index (ex. 01), title, aside (facultatif)
+#}
+<div class="flex flex-col gap-4 border-b border-ink/10 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+    <div>
+        {% if index|default('') %}
+            <div class="font-mono text-[11px] uppercase tracking-wider text-accent">[ {{ index }} ]</div>
+        {% endif %}
+        <h2 class="mt-2 font-display text-5xl font-black leading-[0.9] tracking-tight sm:text-7xl">{{ title }}</h2>
+    </div>
+    {% if aside|default('') %}
+        <div class="font-mono text-[11px] uppercase tracking-wider text-ink/50 sm:max-w-xs sm:text-right">{{ aside }}</div>
+    {% endif %}
+</div>
