@@ -122,7 +122,7 @@ class AppFixtures extends Fixture
                 'primary_link' => '#contact',
                 'secondary_label' => 'Voir les projets',
                 'secondary_link' => '#projets',
-                'stat_value' => '09',
+                'stat_value' => '10',
                 'stat_label' => 'projets livrés',
                 'stat_link' => '#projets',
             ]],
@@ -131,6 +131,14 @@ class AppFixtures extends Fixture
                 'index' => '01',
                 'title' => 'Projets',
                 'projects' => [
+                    [
+                        'image' => '/images/projets/cote-carnon.webp',
+                        'image_alt' => 'Aperçu du site Côté Carnon, conciergerie de locations saisonnières',
+                        'title' => 'Côté Carnon',
+                        'meta' => 'Conciergerie · Vitrine · Locations saisonnières',
+                        'year' => '2026',
+                        'url' => '',
+                    ],
                     [
                         'image' => '/images/projets/oplaa.webp',
                         'image_alt' => "Aperçu d'Oplaa, application de planning d'équipe",
@@ -266,7 +274,7 @@ class AppFixtures extends Fixture
                 'primary_link' => '#contact',
                 'secondary_label' => 'See projects',
                 'secondary_link' => '#projets',
-                'stat_value' => '09',
+                'stat_value' => '10',
                 'stat_label' => 'projects shipped',
                 'stat_link' => '#projets',
             ]],
@@ -275,6 +283,14 @@ class AppFixtures extends Fixture
                 'index' => '01',
                 'title' => 'Projects',
                 'projects' => [
+                    [
+                        'image' => '/images/projets/cote-carnon.webp',
+                        'image_alt' => 'Preview of Côté Carnon, a holiday rental concierge service',
+                        'title' => 'Côté Carnon',
+                        'meta' => 'Concierge service · Showcase · Holiday rentals',
+                        'year' => '2026',
+                        'url' => '',
+                    ],
                     [
                         'image' => '/images/projets/oplaa.webp',
                         'image_alt' => 'Preview of Oplaa, a team scheduling web app',
