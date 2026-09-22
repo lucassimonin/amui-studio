@@ -24,6 +24,10 @@ on:
         description: 'Recharger même si des messages de contact sont en base'
         type: boolean
         default: false
+      preserver_comptes:
+        description: 'Conserver les comptes admin existants (mots de passe compris)'
+        type: boolean
+        default: true
 
 concurrency:
   group: deploy-amui-studio
@@ -51,7 +55,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_SSH_PORT || '22' }}
           command_timeout: 20m
-          envs: IGNORER_MESSAGES
+          envs: IGNORER_MESSAGES,PRESERVER_COMPTES
           script: |
             set -euo pipefail
             cd "${{ secrets.DEPLOY_PATH }}"
@@ -79,11 +83,30 @@ jobs:
               exit 1
             fi
 
+            if [ "${PRESERVER_COMPTES:-true}" = "true" ]; then
+              echo "→ Mise de côté des comptes admin (les fixtures les recréeraient avec le mot de passe de démo)"
+              COMPTES="sauvegardes/comptes-$(date +%Y%m%d-%H%M%S).sql"
+              $COMPOSE exec -T database sh -c 'mysqldump -uroot -p"$MYSQL_ROOT_PASSWORD" --single-transaction "$MYSQL_DATABASE" user' > "$COMPTES"
+              if [ "$(wc -c < "$COMPTES")" -lt 500 ]; then
+                echo "Export des comptes vide : on s'arrête, rien n'a été modifié."
+                exit 1
+              fi
+              echo "   $COMPTES ($(wc -c < "$COMPTES") octets)"
+            fi
+
             echo "→ Rechargement des fixtures"
             $COMPOSE exec -T app php bin/console doctrine:fixtures:load --no-interaction
+
+            if [ "${PRESERVER_COMPTES:-true}" = "true" ]; then
+              echo "→ Restauration des comptes admin"
+              $COMPOSE exec -T database sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' < "$COMPTES"
+              $COMPOSE exec -T database sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -N -B -e "SELECT CONCAT(\"   compte conservé : \", email) FROM \`user\`"'
+            fi
+
             $COMPOSE exec -T app php bin/console cache:clear
 
             echo "✓ Contenu rechargé. Restauration possible :"
             echo "  $COMPOSE exec -T database sh -c 'mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\" \"\$MYSQL_DATABASE\"' < $DUMP"
     env:
       IGNORER_MESSAGES: ${{ inputs.ignorer_messages }}
+      PRESERVER_COMPTES: ${{ inputs.preserver_comptes }}
