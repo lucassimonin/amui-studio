@@ -32,9 +32,10 @@ jobs:
           script: |
             set -euo pipefail
             cd "${{ secrets.DEPLOY_PATH }}"
+            COMPOSE_FILE="${{ secrets.DEPLOY_COMPOSE_FILE || 'compose.proxy.yaml' }}"
             echo "→ Réseau partagé du proxy (no-op s'il n'est pas utilisé)"
             docker network create web 2>/dev/null || true
-            echo "→ Déploiement amuï studio"
-            make prod.deploy
+            echo "→ Déploiement amuï studio (make prod.deploy, fichier: $COMPOSE_FILE)"
+            make prod.deploy PROD_FILE="$COMPOSE_FILE"
             echo "✓ Déploiement terminé"
 
