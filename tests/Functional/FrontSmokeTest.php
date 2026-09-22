@@ -85,6 +85,10 @@ class FrontSmokeTest extends DatabaseWebTestCase
         $this->assertSelectorExists('meta[name="description"]');
         $this->assertSelectorExists('link[rel="canonical"]');
         $this->assertSelectorExists('script[type="application/ld+json"]');
+        // Icône du site et image de partage, même sans réglage renseigné
+        $this->assertSelectorExists('link[rel="apple-touch-icon"]');
+        $this->assertSelectorExists('link[rel="icon"][sizes="32x32"]');
+        $this->assertSelectorExists('meta[property="og:image"]');
     }
 
     public function testLegalPageIsAccessibleAndNoindex(): void

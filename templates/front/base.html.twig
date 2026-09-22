@@ -9,7 +9,14 @@
     <title>{% block head_title %}{{ site_name }}{% endblock %}</title>
     {% block seo %}{% endblock %}
 
-    {% if setting('favicon_url') %}<link rel="icon" href="{{ setting('favicon_url') }}"><link rel="apple-touch-icon" href="{{ setting('favicon_url') }}">{% endif %}
+    {# Icône : celle des réglages si elle existe, sinon le « ä » de la marque #}
+    {% if setting('favicon_url') %}
+        <link rel="icon" href="{{ setting('favicon_url') }}"><link rel="apple-touch-icon" href="{{ setting('favicon_url') }}">
+    {% else %}
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+        <link rel="icon" type="image/png" sizes="512x512" href="/images/favicon-512.png">
+        <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    {% endif %}
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

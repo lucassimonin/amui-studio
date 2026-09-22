@@ -15,7 +15,9 @@
     <meta property="og:title" content="{{ page.metaTitle ?: page.title }}">
     {% if page.metaDescription %}<meta property="og:description" content="{{ page.metaDescription }}">{% endif %}
     <meta property="og:url" content="{{ page_url }}">
-    {% if page.ogImage %}<meta property="og:image" content="{{ page.ogImage starts with 'http' ? page.ogImage : app.request.schemeAndHttpHost ~ page.ogImage }}">{% endif %}
+    {# Image de partage : celle de la page si elle existe, sinon le bandeau de la marque #}
+    {% set og_image = page.ogImage ?: '/images/og-amui.png' %}
+    <meta property="og:image" content="{{ og_image starts with 'http' ? og_image : app.request.schemeAndHttpHost ~ og_image }}">
     <meta name="twitter:card" content="summary_large_image">
 
     {% if page.structuredData %}
