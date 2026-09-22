@@ -94,7 +94,7 @@ prod.build: ## Build de production (Tailwind minifié + assets compilés)
 # Fichier compose : compose.prod.yaml (mono-site) par défaut.
 # Derrière le proxy partagé : make <cible> PROD_FILE=compose.proxy.yaml
 PROD_FILE ?= compose.prod.yaml
-PROD_COMPOSE=docker compose --env-file .env.prod -f $(PROD_FILE)
+PROD_COMPOSE=docker compose --env-file .env.prod -f $(PROD_FILE) -f compose.proxy.yaml
 
 prod.up: ## Build + démarre la prod (FrankenPHP worker + MySQL)
 	$(PROD_COMPOSE) up -d --build
