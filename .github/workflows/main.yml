@@ -1,5 +1,5 @@
 name: Deploy
- 
+
 # Se déclenche APRÈS le workflow "CI" existant, uniquement s'il a réussi sur
 # main : les tests/lint gardent donc le déploiement, sans dupliquer la CI.
 # Déclenchement manuel aussi possible (workflow_dispatch).
@@ -9,11 +9,11 @@ on:
     types: [completed]
     branches: [main]
   workflow_dispatch:
- 
+
 concurrency:
   group: deploy-amui-studio
   cancel-in-progress: false
- 
+
 jobs:
   deploy:
     name: Deploy to server
@@ -32,10 +32,9 @@ jobs:
           script: |
             set -euo pipefail
             cd "${{ secrets.DEPLOY_PATH }}"
-            COMPOSE_FILE="${{ secrets.DEPLOY_COMPOSE_FILE || 'compose.prod.yaml' }}"
             echo "→ Réseau partagé du proxy (no-op s'il n'est pas utilisé)"
             docker network create web 2>/dev/null || true
-            echo "→ Déploiement amuï studio (make prod.deploy, fichier: $COMPOSE_FILE)"
-            make prod.deploy PROD_FILE="$COMPOSE_FILE"
+            echo "→ Déploiement amuï studio"
+            make prod.deploy
             echo "✓ Déploiement terminé"
- 
+
