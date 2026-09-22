@@ -1,0 +1,89 @@
+name: Contenu — recharger les fixtures
+
+# Remet le contenu de production à l'état des fixtures du dépôt.
+# ⚠️ Cette opération VIDE la base avant de la remplir : pages, articles,
+# messages du formulaire et fiches médias sont remplacés.
+#
+# Garde-fous :
+#   1. il faut taper RECHARGER pour lancer ;
+#   2. une sauvegarde SQL est faite sur le serveur avant toute modification ;
+#   3. la commande s'arrête s'il reste des messages non lus/lus en base,
+#      sauf si « ignorer_messages » est coché.
+#
+# Les fichiers des médias (volume media_data) ne sont pas supprimés,
+# seules leurs fiches en base le sont.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Tapez RECHARGER pour confirmer'
+        required: true
+        default: ''
+      ignorer_messages:
+        description: 'Recharger même si des messages de contact sont en base'
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy-amui-studio
+  cancel-in-progress: false
+
+jobs:
+  reload:
+    name: Recharger le contenu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier la confirmation
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          if [ "$CONFIRMATION" != "RECHARGER" ]; then
+            echo "::error::Confirmation absente : tapez RECHARGER pour lancer l'opération."
+            exit 1
+          fi
+
+      - name: Sauvegarde puis rechargement
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || '22' }}
+          command_timeout: 20m
+          envs: IGNORER_MESSAGES
+          script: |
+            set -euo pipefail
+            cd "${{ secrets.DEPLOY_PATH }}"
+            COMPOSE_FILE="${{ secrets.DEPLOY_COMPOSE_FILE || 'compose.prod.yaml' }}"
+            COMPOSE="docker compose --env-file .env.prod -f $COMPOSE_FILE"
+
+            echo "→ Messages présents en base"
+            MESSAGES=$($COMPOSE exec -T database sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -N -B -e "SELECT COUNT(*) FROM contact_message"' 2>/dev/null | tr -d '\r')
+            echo "   $MESSAGES message(s)"
+
+            echo "→ Sauvegarde de la base avant modification"
+            mkdir -p sauvegardes
+            DUMP="sauvegardes/avant-fixtures-$(date +%Y%m%d-%H%M%S).sql"
+            $COMPOSE exec -T database sh -c 'mysqldump -uroot -p"$MYSQL_ROOT_PASSWORD" --single-transaction --routines "$MYSQL_DATABASE"' > "$DUMP"
+            TAILLE=$(wc -c < "$DUMP")
+            echo "   $DUMP ($TAILLE octets)"
+            if [ "$TAILLE" -lt 1000 ]; then
+              echo "Sauvegarde vide ou illisible : on s'arrête, rien n'a été modifié."
+              exit 1
+            fi
+
+            if [ "$MESSAGES" -gt 0 ] && [ "${IGNORER_MESSAGES:-false}" != "true" ]; then
+              echo "$MESSAGES message(s) de contact en base : rien n'a été modifié."
+              echo "Consultez Admin → Messages, puis relancez en cochant « ignorer_messages »."
+              exit 1
+            fi
+
+            echo "→ Rechargement des fixtures"
+            $COMPOSE exec -T app php bin/console doctrine:fixtures:load --no-interaction
+            $COMPOSE exec -T app php bin/console cache:clear
+
+            echo "✓ Contenu rechargé. Restauration possible :"
+            echo "  $COMPOSE exec -T database sh -c 'mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\" \"\$MYSQL_DATABASE\"' < $DUMP"
+    env:
+      IGNORER_MESSAGES: ${{ inputs.ignorer_messages }}
