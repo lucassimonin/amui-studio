@@ -115,6 +115,19 @@ class FrontSmokeTest extends DatabaseWebTestCase
         $this->client->request('GET', '/page-inexistante');
 
         $this->assertResponseStatusCodeSame(404);
+        // Page 404 éditable depuis l'admin, au design du site
+        $this->assertSelectorTextContains('#top', '404');
+        $this->assertSelectorTextContains('h1', "Cette page n'existe pas");
+        $this->assertSelectorExists('#top a[href="/"]');
+    }
+
+    public function testBlogIndexUsesTheJournalHeader(): void
+    {
+        $this->client->request('GET', '/actualites');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h2', 'Actualités');
+        $this->assertSelectorTextContains('main', '[ Journal ]');
     }
 
     public function testContactFormRejectsHoneypot(): void

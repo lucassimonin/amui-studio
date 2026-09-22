@@ -28,6 +28,7 @@ class AppFixtures extends Fixture
         $this->loadNavigation($manager);
         $this->loadHomepage($manager);
         $this->loadLegalPage($manager);
+        $this->loadNotFoundPage($manager);
 
         $manager->flush();
     }
@@ -386,6 +387,36 @@ class AppFixtures extends Fixture
             $block->setType($type)->setData($data)->setPosition($position);
             $page->addBlock($block);
         }
+
+        $manager->persist($page);
+    }
+
+    /** Page 404 éditable : rendue par RedirectSubscriber sur toute URL inconnue. */
+    private function loadNotFoundPage(ObjectManager $manager): void
+    {
+        $page = new Page();
+        $page->setTitle('Page introuvable')
+            ->setSlug('erreur-404')
+            ->setStatus(Page::STATUS_PUBLISHED)
+            ->setNoindex(true)
+            ->setMetaTitle('Page introuvable — amuï studio');
+
+        $block = new Block();
+        $block->setType('hero_trema')->setPosition(0)->setData([
+            'wordmark' => '404',
+            'label_left' => 'Page introuvable',
+            'label_center' => 'Erreur 404',
+            'statement' => "Cette page n'existe pas (ou plus).",
+            'text' => "Le lien est peut-être erroné, ou la page a été déplacée. Reprenez par l'accueil ou regardez les projets.",
+            'primary_label' => "Retour à l'accueil",
+            'primary_link' => '/',
+            'secondary_label' => 'Voir les projets',
+            'secondary_link' => '/#projets',
+            'stat_value' => '',
+            'stat_label' => '',
+            'stat_link' => '',
+        ]);
+        $page->addBlock($block);
 
         $manager->persist($page);
     }
