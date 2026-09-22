@@ -13,7 +13,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800;900&family=Lexend:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800;900&family=Lexend:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -41,23 +41,29 @@
 {% set header_links = nav_items('header')|filter(i => not i.isButton) %}
 {% set header_ctas = nav_items('header')|filter(i => i.isButton) %}
 
+{% import 'front/_trema.html.twig' as brand %}
 <header class="stack border-b border-ink/15">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="relative">
+    <div class="relative flex items-center justify-between gap-3 lg:grid lg:grid-cols-4">
         <a href="{{ path('front_homepage') }}"
-           class="group inline-flex items-baseline gap-1 font-display text-lg font-black tracking-tight transition-colors duration-200 hover:text-accent"
+           class="group inline-flex items-baseline gap-1 whitespace-nowrap px-2 py-4 font-display text-base font-black tracking-tight transition-colors duration-200 hover:text-accent sm:px-3 sm:text-lg"
            aria-label="{{ site_name }} — Retour à l'accueil">
             {% if setting('logo_url') %}
                 <img src="{{ setting('logo_url') }}" alt="{{ site_name }}" class="h-8 w-auto">
             {% else %}
-                <span>{{ site_name }}</span>
+                <span>{{ brand.trema(site_name) }}</span>
             {% endif %}
         </a>
 
-        <nav aria-label="Navigation principale">
-            <ul class="flex items-center gap-6 text-sm font-medium">
+        <nav aria-label="Navigation principale" class="px-2 sm:px-3 lg:col-span-2 lg:col-start-3">
+            <ul class="flex items-center justify-end gap-2.5 text-xs font-medium sm:gap-6 sm:text-sm">
                 {% for item in header_links %}
                     <li>
-                        <a class="transition-colors duration-200 hover:text-accent focus:text-accent" href="{{ item.url }}">{{ item.label }}</a>
+                        <a class="group inline-flex items-baseline gap-1.5 transition-colors duration-200 hover:text-accent focus:text-accent" href="{{ item.url }}">
+                            <span class="hidden font-mono text-[10px] text-ink/40 transition-colors duration-200 group-hover:text-accent sm:inline">{{ '%02d'|format(loop.index) }}</span>
+                            {{ item.label }}
+                        </a>
                     </li>
                 {% endfor %}
                 {% for item in header_ctas %}
@@ -70,7 +76,7 @@
                 {% if page is defined %}
                     {% set translations = page_translations(page) %}
                     {% if translations|length > 1 %}
-                        <li class="flex items-center gap-1.5 text-sm font-medium uppercase">
+                        <li class="flex items-center gap-1 font-medium uppercase sm:gap-1.5">
                             {% for t in translations %}
                                 {% if t.locale == page.locale %}
                                     <span aria-current="true">{{ t.locale }}</span>
@@ -85,6 +91,8 @@
             </ul>
         </nav>
     </div>
+    </div>
+    </div>
 </header>
 
 {# ================= Contenu ================= #}
@@ -93,45 +101,77 @@
 </main>
 
 {# ================= Footer ================= #}
-<footer class="stack border-t border-ink/15">
-    <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:items-end">
-            <div>
-                <div class="font-display text-lg font-black tracking-tight">{{ site_name }}</div>
-                <div class="mt-3 space-y-1 text-sm text-ink/70">
+{% set is_en = app.request.locale == 'en' %}
+{% set networks = {'linkedin': 'LinkedIn', 'instagram': 'Instagram', 'facebook': 'Facebook'}|filter((label, key) => setting(key)) %}
+<footer class="stack relative overflow-hidden border-t border-ink/15">
+    {# Signature en fond : le logotype géant, très pâle, coupé en bas (décoratif) #}
+    <div class="trema-muted pointer-events-none absolute inset-x-0 bottom-0 select-none" aria-hidden="true">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+            <p class="translate-y-[22%] whitespace-nowrap font-display text-[min(36vw,27rem)] font-black leading-[0.78] tracking-[-0.06em] text-ink/[0.04]">
+                {{ brand.trema(site_name|split(' ')|first) }}
+            </p>
+        </div>
+    </div>
+
+    <div class="relative mx-auto max-w-6xl px-4 pt-12 sm:px-6">
+        <div class="grid grid-cols-2 gap-10 lg:grid-cols-4">
+            {# Contact #}
+            <div class="col-span-2 lg:col-span-1">
+                <div class="font-mono text-[11px] uppercase tracking-wider text-ink/50">Contact</div>
+                <div class="mt-4 space-y-1.5 text-sm">
                     {% if setting('contact_email') %}
-                        <div><a class="transition-colors duration-200 hover:text-accent" href="mailto:{{ setting('contact_email') }}">{{ setting('contact_email') }}</a></div>
+                        <a class="block font-semibold transition-colors duration-200 hover:text-accent" href="mailto:{{ setting('contact_email') }}">{{ setting('contact_email') }}</a>
                     {% endif %}
                     {% if setting('phone') %}
-                        <div><a class="transition-colors duration-200 hover:text-accent" href="tel:{{ setting('phone')|replace({' ': ''}) }}">{{ setting('phone') }}</a></div>
+                        <a class="block font-mono text-ink/70 transition-colors duration-200 hover:text-accent" href="tel:{{ setting('phone')|replace({' ': ''}) }}">{{ setting('phone') }}</a>
                     {% endif %}
-                    {% for item in nav_items('footer') %}
-                        <div><a class="transition-colors duration-200 hover:text-accent" href="{{ item.url }}">{{ item.label }}</a></div>
-                    {% endfor %}
                 </div>
             </div>
 
-            {% if setting('linkedin') or setting('instagram') or setting('facebook') %}
-                <div class="sm:text-right">
-                    <div class="text-xs font-semibold uppercase tracking-widest text-ink/70">Réseaux</div>
-                    <div class="mt-4 flex items-center gap-4 sm:justify-end">
-                        {% for network, icon in {'linkedin': 'linkedin', 'instagram': 'instagram', 'facebook': 'facebook'} %}
-                            {% if setting(network) %}
-                                <a class="inline-flex items-center gap-2 border border-ink px-3 py-2 text-sm font-semibold transition-colors duration-200 hover:border-accent hover:text-accent"
-                                   href="{{ setting(network) }}" target="_blank" rel="noopener" aria-label="{{ network|capitalize }}">
-                                    <i data-lucide="{{ icon }}" class="h-4 w-4"></i>
-                                    <span class="hidden sm:inline">{{ network|capitalize }}</span>
+            {# Navigation (reprend le menu du header, numéroté) #}
+            {% if header_links|length > 0 %}
+                <div>
+                    <div class="font-mono text-[11px] uppercase tracking-wider text-ink/50">{{ is_en ? 'Menu' : 'Navigation' }}</div>
+                    <ul class="mt-4 space-y-1.5 text-sm">
+                        {% for item in header_links %}
+                            <li>
+                                <a class="group inline-flex items-baseline gap-2 transition-colors duration-200 hover:text-accent" href="{{ item.url }}">
+                                    <span class="font-mono text-[10px] text-ink/40 transition-colors duration-200 group-hover:text-accent">{{ '%02d'|format(loop.index) }}</span>{{ item.label }}
                                 </a>
-                            {% endif %}
+                            </li>
                         {% endfor %}
-                    </div>
+                    </ul>
+                </div>
+            {% endif %}
+
+            {# Réseaux #}
+            {% if networks|length > 0 %}
+                <div>
+                    <div class="font-mono text-[11px] uppercase tracking-wider text-ink/50">{{ is_en ? 'Social' : 'Réseaux' }}</div>
+                    <ul class="mt-4 space-y-1.5 text-sm">
+                        {% for key, label in networks %}
+                            <li><a class="transition-colors duration-200 hover:text-accent" href="{{ setting(key) }}" target="_blank" rel="noopener">{{ label }} <span aria-hidden="true">↗</span></a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {# Liens légaux (menu footer) #}
+            {% if nav_items('footer')|length > 0 %}
+                <div>
+                    <div class="font-mono text-[11px] uppercase tracking-wider text-ink/50">{{ is_en ? 'Legal' : 'Légal' }}</div>
+                    <ul class="mt-4 space-y-1.5 text-sm">
+                        {% for item in nav_items('footer') %}
+                            <li><a class="transition-colors duration-200 hover:text-accent" href="{{ item.url }}">{{ item.label }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
             {% endif %}
         </div>
 
-        <div class="mt-10 flex items-center justify-between border-t border-ink/15 pt-6">
-            <p class="text-xs text-ink/55">© <span id="year"></span> {{ setting('footer_text', site_name) }}</p>
-            <a href="#contenu" class="text-xs font-semibold transition-colors duration-200 hover:text-accent">Haut de page</a>
+        <div class="mt-14 flex items-center justify-between gap-4 border-t border-ink/15 py-6 font-mono text-[11px] uppercase tracking-wider text-ink/50">
+            <p>© <span id="year"></span> {{ setting('footer_text', site_name) }}</p>
+            <a href="#contenu" class="transition-colors duration-200 hover:text-accent">{{ is_en ? 'Back to top' : 'Haut de page' }} <span aria-hidden="true">↑</span></a>
         </div>
     </div>
 </footer>

@@ -1,35 +1,49 @@
-<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %} class="border-t border-ink/15">
-    <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-        <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
-            <div class="lg:col-span-5">
-                {% if data.title %}
-                    <h2 class="font-display text-3xl font-black tracking-tight sm:text-4xl">{{ data.title }}</h2>
-                {% endif %}
-                {% if data.subtitle %}
-                    <p class="mt-4 text-sm text-ink/70">{{ data.subtitle }}</p>
-                {% endif %}
-            </div>
+<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %} class="border-b border-ink/15">
+    <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pb-28 sm:pt-16">
 
-            <div class="lg:col-span-7">
-                {% if data.statement %}
-                    <p class="font-display text-2xl font-black tracking-tight sm:text-3xl">{{ data.statement }}</p>
-                {% endif %}
-                {% if data.text %}
-                    <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink/80">{{ data.text }}</p>
-                {% endif %}
+        {% if data.title %}
+            {% include 'front/_section_head.html.twig' with {index: data.index|default(''), title: data.title, aside: data.subtitle|default('')} only %}
+        {% endif %}
 
-                {% set boxes = data.boxes|split_pairs %}
-                {% if boxes|length > 0 %}
-                    <dl class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        {% for box in boxes %}
-                            <div class="border border-ink/15 p-5">
-                                <dt class="text-xs font-semibold uppercase tracking-widest text-ink/70">{{ box.left }}</dt>
-                                <dd class="mt-2 font-display text-lg font-black tracking-tight">{{ box.right }}</dd>
-                            </div>
-                        {% endfor %}
-                    </dl>
-                {% endif %}
-            </div>
+        {# Phrase forte : la ponctuation finale passe en accent, comme le tréma #}
+        {% if data.statement %}
+            {% set last = data.statement|slice(-1) %}
+            <p class="mt-12 max-w-5xl font-display text-4xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+                {%- if last in ['.', '!', '?'] -%}
+                    {{ data.statement|slice(0, -1) }}<span class="text-accent">{{ last }}</span>
+                {%- else -%}
+                    {{ data.statement }}
+                {%- endif -%}
+            </p>
+        {% endif %}
+
+        <div class="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-4">
+            {% if data.text %}
+                <p class="text-sm leading-relaxed text-ink/75">{{ data.text }}</p>
+            {% endif %}
+
+            {# Fiche technique : une ligne par domaine, compétences séparées par des points en accent #}
+            {% set boxes = data.boxes|split_pairs %}
+            {% if boxes|length > 0 %}
+                <dl class="border-t border-ink lg:col-span-3">
+                    {% for box in boxes %}
+                        <div class="grid grid-cols-1 gap-2 border-b border-ink/10 py-5 sm:grid-cols-4 sm:gap-6">
+                            <dt class="font-mono text-[11px] uppercase tracking-wider text-ink/50 sm:pt-2">
+                                <span class="text-accent">{{ '%02d'|format(loop.index) }}</span> {{ box.left }}
+                            </dt>
+                            {# Le point reste collé à la compétence qui le précède : jamais de point en début de ligne #}
+                            <dd class="font-display text-xl font-black leading-snug tracking-tight sm:col-span-3 sm:text-3xl">
+                                {%- for item in box.right|split('·') -%}
+                                    <span class="whitespace-nowrap">{{ item|trim }}
+                                    {%- if not loop.last -%}
+                                        <span class="ml-2.5 mr-1.5 inline-block size-1.5 rounded-full bg-accent align-middle sm:ml-3 sm:size-2" aria-hidden="true"></span><span class="sr-only">, </span>
+                                    {%- endif -%}</span>{{ not loop.last ? ' ' }}
+                                {%- endfor -%}
+                            </dd>
+                        </div>
+                    {% endfor %}
+                </dl>
+            {% endif %}
         </div>
     </div>
 </section>

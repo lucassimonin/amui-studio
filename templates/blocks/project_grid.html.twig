@@ -1,36 +1,48 @@
-<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %} class="border-t border-ink/15">
-    <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %} class="border-b border-ink/15">
+    <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pb-28 sm:pt-16">
+
+        {# En-tête : numéro de section + titre + nombre de projets #}
         {% if data.title %}
-            <div class="flex items-end justify-between gap-6">
-                <h2 class="font-display text-3xl font-black tracking-tight sm:text-4xl">{{ data.title }}</h2>
-            </div>
+            {% include 'front/_section_head.html.twig' with {index: data.index|default(''), title: data.title, aside: '%02d'|format(data.projects|length)} only %}
         {% endif %}
 
         {% if data.projects|length > 0 %}
-            <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {# Quinconce : sur deux colonnes, les projets pairs sont décalés vers le bas #}
+            <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2">
                 {% for project in data.projects %}
-                    <a href="{{ project.url|default('#') ?: '#' }}"
-                       {% if project.url|default('') starts with 'http' %}target="_blank" rel="noopener noreferrer"{% endif %}
-                       class="group relative overflow-hidden border border-ink transition-colors duration-200 hover:border-accent focus:border-accent"
-                       aria-label="Projet : {{ project.title|default('') }}">
-                        {% if project.image|default('') %}
-                            <div class="aspect-[16/10] bg-paper">
+                    {% set url = project.url|default('') %}
+                    {% set has_link = url and url != '#' %}
+                    <{{ has_link ? 'a' : 'div' }}
+                        {% if has_link %}href="{{ url }}"{% if url starts with 'http' %} target="_blank" rel="noopener noreferrer"{% endif %}{% endif %}
+                        class="group block md:even:mt-28"
+                        {% if has_link %}aria-label="Projet : {{ project.title|default('') }}"{% endif %}>
+
+                        <div class="aspect-[4/3] overflow-hidden bg-ink/5">
+                            {% if project.image|default('') %}
                                 <img src="{{ project.image }}" alt="{{ project.image_alt|default('Aperçu du projet ' ~ project.title|default('')) }}"
-                                     class="h-full w-full object-cover" loading="lazy" referrerpolicy="no-referrer">
-                            </div>
-                        {% endif %}
-                        <div class="flex items-center justify-between px-5 py-4">
-                            <div>
-                                <div class="font-display text-lg font-black tracking-tight transition-colors duration-200 group-hover:text-accent group-focus:text-accent">
-                                    {{ project.title|default('') }}
-                                </div>
+                                     class="h-full w-full object-cover transition duration-500 ease-out md:grayscale md:group-hover:grayscale-0 md:group-focus-visible:grayscale-0"
+                                     loading="lazy" referrerpolicy="no-referrer">
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-4 flex items-baseline gap-4 border-t border-ink pt-3">
+                            <span class="font-mono text-[11px] text-ink/50 transition-colors duration-200 group-hover:text-accent">{{ '%02d'|format(loop.index) }}</span>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="font-display text-2xl font-black tracking-tight sm:text-3xl">{{ project.title|default('') }}</h3>
                                 {% if project.meta|default('') %}
-                                    <div class="mt-1 text-xs text-ink/70">{{ project.meta }}</div>
+                                    <div class="mt-1 font-mono text-[11px] uppercase tracking-wider text-ink/60">{{ project.meta }}</div>
                                 {% endif %}
                             </div>
-                            <span class="text-xs font-semibold text-ink/70 transition-colors duration-200 group-hover:text-accent group-focus:text-accent">Voir</span>
+                            {% if project.year|default('') %}
+                                <span class="font-mono text-[11px] text-ink/50">{{ project.year }}</span>
+                            {% endif %}
+                            {# Le tréma apparaît au survol #}
+                            <span class="flex translate-y-[-2px] gap-1 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true">
+                                <i class="block size-2 rounded-full bg-accent"></i>
+                                <i class="block size-2 rounded-full bg-accent"></i>
+                            </span>
                         </div>
-                    </a>
+                    </{{ has_link ? 'a' : 'div' }}>
                 {% endfor %}
             </div>
         {% endif %}

@@ -1,0 +1,18 @@
+{#
+    Signature amuï : chaque « ï » est remplacé par un « ı » sans point
+    surmonté de deux points en couleur d'accent (styles .trema dans app.css).
+    Le texte réel reste lu par les lecteurs d'écran.
+    Usage : {% import 'front/_trema.html.twig' as brand %} {{ brand.trema('amuï studio') }}
+#}
+{% macro trema(text) %}
+    {%- set parts = text|split('ï') -%}
+    {%- if parts|length > 1 -%}
+        <span class="sr-only">{{ text }}</span><span aria-hidden="true">
+            {%- for part in parts -%}
+                {{ part }}{% if not loop.last %}<span class="trema">ı<span class="trema-dots"></span></span>{% endif %}
+            {%- endfor -%}
+        </span>
+    {%- else -%}
+        {{ text }}
+    {%- endif -%}
+{% endmacro %}

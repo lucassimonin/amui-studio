@@ -28,9 +28,10 @@ class ContactSimpleBlock extends AbstractBlockType
     {
         $builder
             ->add('anchor', TextType::class, ['label' => 'Ancre HTML', 'required' => false, 'help' => 'Ex: contact → lien #contact'])
+            ->add('index', TextType::class, ['label' => 'Numéro de section', 'required' => false, 'help' => 'Ex: 03 — reprend la numérotation du menu'])
             ->add('title', TextType::class, ['label' => 'Titre', 'required' => false])
             ->add('text', TextareaType::class, ['label' => 'Texte', 'required' => false, 'attr' => ['rows' => 3]])
-            ->add('infos_label', TextType::class, ['label' => 'Libellé de l\'encadré infos', 'required' => false])
+            ->add('infos_label', TextType::class, ['label' => 'Libellé au-dessus de l\'email', 'required' => false, 'help' => 'Ex : Écrivez-nous'])
             ->add('email', TextType::class, ['label' => 'Email affiché', 'required' => false])
             ->add('phone', TextType::class, ['label' => 'Téléphone affiché', 'required' => false])
             ->add('form_note', TextType::class, ['label' => 'Note sous le formulaire', 'required' => false])
@@ -41,9 +42,10 @@ class ContactSimpleBlock extends AbstractBlockType
     {
         return [
             'anchor' => 'contact',
+            'index' => '',
             'title' => 'Contact',
             'text' => '',
-            'infos_label' => 'Infos',
+            'infos_label' => 'Écrivez-nous',
             'email' => '',
             'phone' => '',
             'form_note' => 'En envoyant, vous acceptez un retour par email.',

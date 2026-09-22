@@ -1,0 +1,62 @@
+{% import 'front/_trema.html.twig' as brand %}
+
+<section id="top" class="border-b border-ink/15">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="relative">
+
+            {# Étiquettes techniques #}
+            {% if data.label_left or data.label_center %}
+                <div class="relative grid grid-cols-1 border-b border-ink/10 py-2 font-mono text-[11px] uppercase tracking-wider text-ink/60 sm:grid-cols-2 sm:py-0 lg:grid-cols-4">
+                    <div class="px-3 py-1 sm:py-3"><span class="text-accent">[ 00 ]</span> {{ data.label_left }}</div>
+                    <div class="px-3 py-1 sm:py-3 lg:col-span-2">{{ data.label_center }}</div>
+                </div>
+            {% endif %}
+
+            {# Logotype géant #}
+            {% if data.wordmark %}
+                <p class="trema-anim relative select-none whitespace-nowrap px-1 pb-4 pt-8 font-display text-[min(36vw,27rem)] font-black leading-[0.78] tracking-[-0.06em] sm:pt-10">
+                    {{ brand.trema(data.wordmark) }}
+                </p>
+            {% endif %}
+
+            <div class="relative grid grid-cols-1 border-t border-ink/10 lg:grid-cols-4">
+                {# Accroche #}
+                <div class="px-3 py-6 lg:col-span-2 lg:py-8">
+                    <h1 class="max-w-xl font-display text-3xl font-black leading-[1.05] tracking-tight sm:text-4xl">{{ data.statement }}</h1>
+                </div>
+
+                {# Texte + boutons #}
+                <div class="border-t border-ink/10 px-3 py-6 lg:border-t-0 lg:py-8">
+                    {% if data.text %}
+                        <p class="text-sm leading-relaxed text-ink/75">{{ data.text }}</p>
+                    {% endif %}
+                    {% if data.primary_label or data.secondary_label %}
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            {% if data.primary_label %}
+                                <a href="{{ data.primary_link ?: '#' }}"
+                                   class="inline-flex items-center justify-center border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-paper transition-colors duration-200 hover:border-accent hover:bg-accent focus:border-accent focus:bg-accent">
+                                    {{ data.primary_label }}
+                                </a>
+                            {% endif %}
+                            {% if data.secondary_label %}
+                                <a href="{{ data.secondary_link ?: '#' }}"
+                                   class="inline-flex items-center justify-center border border-ink px-4 py-2.5 text-sm font-semibold text-ink transition-colors duration-200 hover:border-accent hover:text-accent focus:border-accent focus:text-accent">
+                                    {{ data.secondary_label }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Chiffre clé #}
+                {% if data.stat_value %}
+                    <a href="{{ data.stat_link ?: '#' }}"
+                       class="group flex items-end justify-between gap-4 border-t border-ink/10 px-3 py-6 lg:flex-col lg:items-start lg:border-t-0 lg:py-8">
+                        <span class="font-display text-7xl font-black leading-[0.8] tracking-tight text-accent lg:text-8xl">{{ data.stat_value }}</span>
+                        <span class="font-mono text-[11px] uppercase tracking-wider text-ink/60 transition-colors duration-200 group-hover:text-accent">{{ data.stat_label }} ↓</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>

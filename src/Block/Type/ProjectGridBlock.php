@@ -29,6 +29,7 @@ class ProjectGridBlock extends AbstractBlockType
     {
         $builder
             ->add('anchor', TextType::class, ['label' => 'Ancre HTML', 'required' => false, 'help' => 'Ex: projets → lien #projets dans la navigation'])
+            ->add('index', TextType::class, ['label' => 'Numéro de section', 'required' => false, 'help' => 'Ex: 01 — reprend la numérotation du menu'])
             ->add('title', TextType::class, ['label' => 'Titre', 'required' => false])
             ->add('projects', CollectionType::class, [
                 'label' => 'Projets',
@@ -44,9 +45,10 @@ class ProjectGridBlock extends AbstractBlockType
     {
         return [
             'anchor' => 'projets',
+            'index' => '01',
             'title' => 'Projets',
             'projects' => [
-                ['image' => '', 'image_alt' => '', 'title' => 'Nouveau projet', 'meta' => '', 'url' => '#'],
+                ['image' => '', 'image_alt' => '', 'title' => 'Nouveau projet', 'meta' => '', 'year' => '', 'url' => '#'],
             ],
         ];
     }

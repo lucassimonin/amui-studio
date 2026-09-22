@@ -11,7 +11,70 @@ class FrontSmokeTest extends DatabaseWebTestCase
         $this->client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'amuï studio');
+        // Dès le haut de page : sites ET applications
+        $this->assertSelectorTextContains('h1', 'Sites web & applications sur mesure.');
+        $this->assertSelectorTextContains('#top', 'Applications');
+        $this->assertSelectorTextContains('title', 'Sites web & applications');
+        $this->assertSelectorTextContains('#top', 'projets livrés');
+    }
+
+    public function testProjectGridNumbersProjectsAndSkipsEmptyLinks(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('#projets', '[ 01 ]');
+        $this->assertCount(6, $crawler->filter('#projets h3'));
+        $this->assertSelectorExists('#projets a[href="https://dj-noma.netlify.app"][target="_blank"]');
+        // Les projets sans vrai lien (« # ») ne sont pas cliquables
+        $this->assertCount(0, $crawler->filter('#projets a[href="#"]'));
+    }
+
+    public function testAgencySectionShowsSkillsSheet(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('#agence', '[ 02 ]');
+        // Un domaine par ligne, la ponctuation finale de la phrase forte en accent
+        $this->assertCount(4, $crawler->filter('#agence dl > div'));
+        $this->assertSelectorTextSame('#agence p > span.text-accent', '.');
+    }
+
+    public function testContactShowsBigEmailAndNumberedForm(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('#contact', '[ 03 ]');
+        // L'email reste un vrai lien mailto, le « @ » est mis en accent
+        $this->assertSelectorExists('#contact a[href="mailto:hello@amui.fr"] span.text-accent');
+        $this->assertCount(4, $crawler->filter('#contact form label'));
+    }
+
+    public function testFooterSignsOffWithWordmarkAndNumberedMenu(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('footer .trema .trema-dots');
+        $this->assertSelectorTextSame('footer .sr-only', 'amuï');
+        $this->assertCount(3, $crawler->filter('footer a[href^="#"] span.font-mono'));
+        $this->assertSelectorExists('footer a[href="/mentions-legales"]');
+        $this->assertSelectorTextContains('footer', 'Haut de page');
+    }
+
+    public function testTremaSignatureKeepsReadableText(): void
+    {
+        $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        // Le « ï » est dessiné (ı + deux points en accent)…
+        $this->assertSelectorExists('#top .trema .trema-dots');
+        $this->assertSelectorExists('header .trema');
+        // …mais le texte réel reste lu par les lecteurs d'écran
+        $this->assertSelectorTextSame('#top .sr-only', 'amuï');
+        $this->assertSelectorTextSame('header .sr-only', 'amuï studio');
     }
 
     public function testHomepageContainsSeoTags(): void
@@ -30,6 +93,10 @@ class FrontSmokeTest extends DatabaseWebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('meta[name="robots"][content="noindex, nofollow"]');
+        // Rubriques obligatoires (LCEN + RGPD)
+        foreach (['Éditeur du site', 'Directeur de la publication', 'Hébergement', 'Données personnelles', 'Cookies'] as $section) {
+            $this->assertSelectorTextContains('main', $section);
+        }
     }
 
     public function testSitemapListsPublishedIndexablePages(): void

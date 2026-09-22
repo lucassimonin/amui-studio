@@ -28,6 +28,7 @@ class SplitIntroBlock extends AbstractBlockType
     {
         $builder
             ->add('anchor', TextType::class, ['label' => 'Ancre HTML', 'required' => false, 'help' => 'Ex: agence → lien #agence'])
+            ->add('index', TextType::class, ['label' => 'Numéro de section', 'required' => false, 'help' => 'Ex: 02 — reprend la numérotation du menu'])
             ->add('title', TextType::class, ['label' => 'Titre', 'required' => false])
             ->add('subtitle', TextareaType::class, ['label' => 'Intro (sous le titre)', 'required' => false, 'attr' => ['rows' => 2]])
             ->add('statement', TextType::class, ['label' => 'Phrase forte', 'required' => false])
@@ -44,6 +45,7 @@ class SplitIntroBlock extends AbstractBlockType
     {
         return [
             'anchor' => '',
+            'index' => '',
             'title' => 'Titre de section',
             'subtitle' => '',
             'statement' => '',
