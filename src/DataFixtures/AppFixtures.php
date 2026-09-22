@@ -48,7 +48,7 @@ class AppFixtures extends Fixture
             'tagline' => 'Sites web & applications sur mesure',
             'contact_email' => 'hello@amui.fr',
             'mailer_from' => 'no-reply@amui.fr',
-            'phone' => '+33 6 00 00 00 00',
+            'phone' => '',
             'footer_text' => 'amuï studio. Minimalisme radical.',
             'linkedin' => 'https://www.linkedin.com/',
         ];
@@ -107,7 +107,6 @@ class AppFixtures extends Fixture
                 'name' => 'amuï studio',
                 'description' => "Studio digital : sites web et applications sur mesure, direction artistique, design système, développement web et mobile.",
                 'email' => 'hello@amui.fr',
-                'telephone' => '+33600000000',
                 'url' => 'https://amui.fr',
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
@@ -122,7 +121,7 @@ class AppFixtures extends Fixture
                 'primary_link' => '#contact',
                 'secondary_label' => 'Voir les projets',
                 'secondary_link' => '#projets',
-                'stat_value' => '06',
+                'stat_value' => '10',
                 'stat_label' => 'projets livrés',
                 'stat_link' => '#projets',
             ]],
@@ -131,6 +130,38 @@ class AppFixtures extends Fixture
                 'index' => '01',
                 'title' => 'Projets',
                 'projects' => [
+                    [
+                        'image' => '/images/projets/cote-carnon.webp',
+                        'image_alt' => 'Aperçu du site Côté Carnon, conciergerie de locations saisonnières',
+                        'title' => 'Côté Carnon',
+                        'meta' => 'Conciergerie · Vitrine · Locations saisonnières',
+                        'year' => '2026',
+                        'url' => '',
+                    ],
+                    [
+                        'image' => '/images/projets/oplaa.webp',
+                        'image_alt' => "Aperçu d'Oplaa, application de planning d'équipe",
+                        'title' => 'Oplaa',
+                        'meta' => 'Application web · Planning · Supabase',
+                        'year' => '2026',
+                        'url' => 'https://oplaa.pro',
+                    ],
+                    [
+                        'image' => '/images/projets/jats-carnet.webp',
+                        'image_alt' => 'Aperçu du site de JATS, producteur de musique électronique',
+                        'title' => 'JATS — Le Carnet',
+                        'meta' => 'Site artiste · Presse · Booking',
+                        'year' => '2026',
+                        'url' => 'https://jats-carnet.netlify.app',
+                    ],
+                    [
+                        'image' => '/images/projets/jats-power.webp',
+                        'image_alt' => 'Aperçu de la carte de visite numérique de JATS',
+                        'title' => 'JATS — La Carte',
+                        'meta' => 'One page · Carte numérique · Presse',
+                        'year' => '2026',
+                        'url' => 'https://jats-power.netlify.app',
+                    ],
                     [
                         'image' => '/images/projets/noma.webp',
                         'image_alt' => 'Aperçu du site de Noma, DJ et producteur',
@@ -193,7 +224,7 @@ class AppFixtures extends Fixture
                 'text' => "Un message clair, une réponse rapide. Dites-nous ce que vous voulez faire — on vous dira comment le faire bien.",
                 'infos_label' => 'Écrivez-nous',
                 'email' => 'hello@amui.fr',
-                'phone' => '+33 6 00 00 00 00',
+                'phone' => '',
                 'form_note' => 'En envoyant, vous acceptez un retour par email.',
                 'recipient' => '',
             ]],
@@ -227,7 +258,6 @@ class AppFixtures extends Fixture
                 'name' => 'amuï studio',
                 'description' => 'Digital studio: custom websites and apps, art direction, design systems, web and mobile development.',
                 'email' => 'hello@amui.fr',
-                'telephone' => '+33600000000',
                 'url' => 'https://amui.fr',
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
@@ -242,7 +272,7 @@ class AppFixtures extends Fixture
                 'primary_link' => '#contact',
                 'secondary_label' => 'See projects',
                 'secondary_link' => '#projets',
-                'stat_value' => '06',
+                'stat_value' => '10',
                 'stat_label' => 'projects shipped',
                 'stat_link' => '#projets',
             ]],
@@ -251,6 +281,38 @@ class AppFixtures extends Fixture
                 'index' => '01',
                 'title' => 'Projects',
                 'projects' => [
+                    [
+                        'image' => '/images/projets/cote-carnon.webp',
+                        'image_alt' => 'Preview of Côté Carnon, a holiday rental concierge service',
+                        'title' => 'Côté Carnon',
+                        'meta' => 'Concierge service · Showcase · Holiday rentals',
+                        'year' => '2026',
+                        'url' => '',
+                    ],
+                    [
+                        'image' => '/images/projets/oplaa.webp',
+                        'image_alt' => 'Preview of Oplaa, a team scheduling web app',
+                        'title' => 'Oplaa',
+                        'meta' => 'Web app · Scheduling · Supabase',
+                        'year' => '2026',
+                        'url' => 'https://oplaa.pro',
+                    ],
+                    [
+                        'image' => '/images/projets/jats-carnet.webp',
+                        'image_alt' => 'Preview of the website of JATS, electronic music producer',
+                        'title' => 'JATS — Press kit',
+                        'meta' => 'Artist site · Press · Booking',
+                        'year' => '2026',
+                        'url' => 'https://jats-carnet.netlify.app',
+                    ],
+                    [
+                        'image' => '/images/projets/jats-power.webp',
+                        'image_alt' => 'Preview of the digital business card of JATS',
+                        'title' => 'JATS — Card',
+                        'meta' => 'One page · Digital card · Press',
+                        'year' => '2026',
+                        'url' => 'https://jats-power.netlify.app',
+                    ],
                     [
                         'image' => '/images/projets/noma.webp',
                         'image_alt' => 'Preview of the website of Noma, DJ and producer',
@@ -313,7 +375,7 @@ class AppFixtures extends Fixture
                 'text' => "A clear message, a quick reply. Tell us what you want to do — we'll tell you how to do it well.",
                 'infos_label' => 'Write to us',
                 'email' => 'hello@amui.fr',
-                'phone' => '+33 6 00 00 00 00',
+                'phone' => '',
                 'form_note' => 'By sending this, you agree to a reply by email.',
                 'recipient' => '',
             ]],
@@ -341,7 +403,10 @@ class AppFixtures extends Fixture
         $block->setType('rich_text')->setPosition(0)->setData([
             'kicker' => '',
             'title' => 'Mentions légales',
-            'content' => "<h2>Éditeur du site</h2>\n<p>Le site amui.fr est édité par amuï studio, <mark>[à compléter : statut juridique, ex. entreprise individuelle / SAS au capital de …]</mark>.</p>\n<ul>\n<li>Responsable : <mark>[à compléter : nom et prénom]</mark></li>\n<li>Adresse : <mark>[à compléter : adresse postale du siège]</mark></li>\n<li>SIRET : <mark>[à compléter : numéro SIRET]</mark></li>\n<li>TVA intracommunautaire : <mark>[à compléter : numéro, ou « TVA non applicable, art. 293 B du CGI »]</mark></li>\n<li>Email : <a href=\"mailto:hello@amui.fr\">hello@amui.fr</a></li>\n<li>Téléphone : <mark>[à compléter : numéro]</mark></li>\n</ul>\n<h2>Directeur de la publication</h2>\n<p><mark>[à compléter : nom et prénom du directeur de la publication]</mark></p>\n<h2>Hébergement</h2>\n<p><mark>[à compléter : nom de l’hébergeur, adresse et téléphone]</mark></p>\n<h2>Propriété intellectuelle</h2>\n<p>L’ensemble des contenus de ce site (textes, logotype, éléments graphiques, mise en page) est la propriété d’amuï studio, sauf mention contraire. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>\n<p>Les visuels des projets présentés dans le portfolio restent la propriété de leurs titulaires respectifs et sont reproduits à titre de références.</p>\n<h2>Données personnelles</h2>\n<p>Les informations transmises via le formulaire de contact (nom, email, sujet, message) sont utilisées uniquement pour répondre à votre demande. Elles sont destinées à amuï studio et ne sont ni cédées ni revendues.</p>\n<p>Responsable du traitement : amuï studio. Base légale : votre demande de contact. Durée de conservation : <mark>[à compléter : durée, ex. 3 ans après le dernier échange]</mark>.</p>\n<p>Conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés, vous disposez d’un droit d’accès, de rectification, d’effacement, d’opposition, de limitation et de portabilité de vos données. Pour l’exercer, écrivez à <a href=\"mailto:hello@amui.fr\">hello@amui.fr</a>. Vous pouvez également introduire une réclamation auprès de la CNIL (<a href=\"https://www.cnil.fr\">cnil.fr</a>).</p>\n<h2>Cookies</h2>\n<p>Ce site ne dépose aucun cookie publicitaire ni de mesure d’audience. Seul un cookie technique de session est utilisé pour sécuriser le formulaire de contact ; il est strictement nécessaire au fonctionnement du site et ne requiert pas de consentement.</p>\n<h2>Crédits</h2>\n<p>Conception, design et développement : amuï studio.</p>",
+            // À ajouter dès que les informations sont connues (obligatoire, art. 6 LCEN) :
+            // statut juridique, nom du responsable, adresse du siège, SIRET, TVA,
+            // directeur de la publication et téléphone.
+            'content' => "<h2>Éditeur du site</h2>\n<p>Le site amui.fr est édité par amuï studio, studio digital spécialisé dans la création de sites web et d'applications.</p>\n<p>Contact : <a href=\"mailto:hello@amui.fr\">hello@amui.fr</a></p>\n<h2>Hébergement</h2>\n<p>OVH SAS — 2 rue Kellermann, 59100 Roubaix, France — <a href=\"https://www.ovhcloud.com\">ovhcloud.com</a></p>\n<h2>Propriété intellectuelle</h2>\n<p>L'ensemble des contenus de ce site (textes, logotype, éléments graphiques, mise en page) est la propriété d'amuï studio, sauf mention contraire. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>\n<p>Les visuels des projets présentés dans le portfolio restent la propriété de leurs titulaires respectifs et sont reproduits à titre de références.</p>\n<h2>Données personnelles</h2>\n<p>Les informations transmises via le formulaire de contact (nom, email, sujet, message) sont utilisées uniquement pour répondre à votre demande. Elles sont destinées à amuï studio, responsable du traitement, et ne sont ni cédées ni revendues. Elles sont conservées le temps nécessaire au traitement de la demande.</p>\n<p>Conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition, de limitation et de portabilité de vos données. Pour l'exercer, écrivez à <a href=\"mailto:hello@amui.fr\">hello@amui.fr</a>. Vous pouvez également introduire une réclamation auprès de la CNIL (<a href=\"https://www.cnil.fr\">cnil.fr</a>).</p>\n<h2>Cookies</h2>\n<p>Ce site ne dépose aucun cookie publicitaire ni de mesure d'audience. Seul un cookie technique de session est utilisé pour sécuriser le formulaire de contact ; il est strictement nécessaire au fonctionnement du site et ne requiert pas de consentement.</p>\n<h2>Crédits</h2>\n<p>Conception, design et développement : amuï studio.</p>",
         ]);
         $page->addBlock($block);
 

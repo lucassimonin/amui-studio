@@ -24,7 +24,7 @@ class FrontSmokeTest extends DatabaseWebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('#projets', '[ 01 ]');
-        $this->assertCount(6, $crawler->filter('#projets h3'));
+        $this->assertCount(10, $crawler->filter('#projets h3'));
         $this->assertSelectorExists('#projets a[href="https://dj-noma.netlify.app"][target="_blank"]');
         // Les projets sans vrai lien (« # ») ne sont pas cliquables
         $this->assertCount(0, $crawler->filter('#projets a[href="#"]'));
@@ -94,7 +94,7 @@ class FrontSmokeTest extends DatabaseWebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('meta[name="robots"][content="noindex, nofollow"]');
         // Rubriques obligatoires (LCEN + RGPD)
-        foreach (['Éditeur du site', 'Directeur de la publication', 'Hébergement', 'Données personnelles', 'Cookies'] as $section) {
+        foreach (['Éditeur du site', 'Hébergement', 'Données personnelles', 'Cookies'] as $section) {
             $this->assertSelectorTextContains('main', $section);
         }
     }

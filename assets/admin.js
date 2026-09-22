@@ -45,6 +45,23 @@ function initBlockSorting() {
 }
 
 /* ---- Collections de formulaires (cartes, catégories…) ---- */
+
+/**
+ * Renumérote les champs d'une collection selon l'ordre affiché.
+ * Symfony lit l'indice dans le nom du champ (data[projects][2][title]) :
+ * sans cette étape, un glisser-déposer n'aurait aucun effet à l'enregistrement.
+ */
+function renumberCollection(collection) {
+    collection.querySelectorAll('[data-collection-item]').forEach((item, position) => {
+        item.querySelectorAll('input, select, textarea, label, [data-rte]').forEach((el) => {
+            if (el.name) el.name = el.name.replace(/\[(\d+|__name__)\]/, `[${position}]`);
+            if (el.id) el.id = el.id.replace(/_(\d+|__name__)_/, `_${position}_`);
+            const target = el.getAttribute('for');
+            if (target) el.setAttribute('for', target.replace(/_(\d+|__name__)_/, `_${position}_`));
+        });
+    });
+}
+
 function initCollections() {
     document.querySelectorAll('[data-collection]').forEach((collection) => {
         let index = parseInt(collection.dataset.index || '0', 10);
@@ -55,19 +72,35 @@ function initCollections() {
             const html = collection.dataset.prototype.replace(/__name__/g, index++);
             const item = document.createElement('div');
             item.setAttribute('data-collection-item', '');
-            item.className = 'relative rounded-lg border border-stone-200 bg-stone-50/80 p-4';
+            item.className = 'relative rounded-lg border border-stone-200 bg-stone-50/80 p-4 pt-9';
             item.innerHTML =
                 '<button type="button" data-collection-remove class="absolute right-3 top-3 text-xs font-semibold text-stone-400 transition hover:text-red-600">Retirer</button>' +
+                '<span data-collection-handle class="absolute left-3 top-3 cursor-grab select-none text-stone-400 transition hover:text-stone-700" title="Glisser pour réordonner" aria-hidden="true">⠿</span>' +
                 html;
             items.appendChild(item);
             collection.dataset.index = String(index);
+            renumberCollection(collection);
         });
+
+        // Réordonner les éléments par glisser-déposer (poignée en haut à gauche)
+        if (items) {
+            Sortable.create(items, {
+                animation: 150,
+                handle: '[data-collection-handle]',
+                ghostClass: 'opacity-40',
+                onEnd: () => renumberCollection(collection),
+            });
+        }
     });
 
     // Suppression d'un élément (délégation, couvre les éléments ajoutés)
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-collection-remove]');
-        if (btn) btn.closest('[data-collection-item]')?.remove();
+        if (!btn) return;
+        const item = btn.closest('[data-collection-item]');
+        const collection = item?.closest('[data-collection]');
+        item?.remove();
+        if (collection) renumberCollection(collection);
     });
 }
 
