@@ -56,7 +56,7 @@ jobs:
             set -euo pipefail
             cd "${{ secrets.DEPLOY_PATH }}"
             COMPOSE_FILE="${{ secrets.DEPLOY_COMPOSE_FILE || 'compose.prod.yaml' }}"
-            COMPOSE="docker compose --env-file .env.prod -f $COMPOSE_FILE"
+            COMPOSE="docker compose --env-file .env.prod -f $COMPOSE_FILE -f compose.proxy.yaml"
 
             echo "→ Messages présents en base"
             MESSAGES=$($COMPOSE exec -T database sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -N -B -e "SELECT COUNT(*) FROM contact_message"' 2>/dev/null | tr -d '\r')
