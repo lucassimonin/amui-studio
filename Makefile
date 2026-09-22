@@ -1,6 +1,9 @@
 COMPOSER=symfony composer
 CONSOLE=symfony console
 PHP=symfony php
+# Tests : PHP « nu », sans la CLI Symfony. Elle injecte le DATABASE_URL du conteneur
+# Docker, qui écrase le SQLite de .env.test — les tests écrasaient alors la base de dev.
+TEST_PHP=php
 DOCKER=docker compose
 
 .PHONY: up stop logs install clean db.init db.fixture db.clean db.reset \
@@ -62,16 +65,16 @@ asset.watch: ## Recompile Tailwind à chaque modification
 ## —— Tests —————————————————————————————————————————————————————————
 # Les tests utilisent SQLite (var/test.db) : pas besoin de Docker.
 test: ## Tous les tests PHPUnit (unitaires + fonctionnels)
-	$(PHP) vendor/bin/phpunit
+	$(TEST_PHP) vendor/bin/phpunit
 
 test.unit: ## Tests unitaires seulement
-	$(PHP) vendor/bin/phpunit --testsuite=unit
+	$(TEST_PHP) vendor/bin/phpunit --testsuite=unit
 
 test.functional: ## Tests fonctionnels seulement (smoke front/admin, redirections)
-	$(PHP) vendor/bin/phpunit --testsuite=functional
+	$(TEST_PHP) vendor/bin/phpunit --testsuite=functional
 
 behat: ## Tests d'acceptance Behat (features/)
-	$(PHP) vendor/bin/behat --format=progress
+	$(TEST_PHP) vendor/bin/behat --format=progress
 
 test.all: ## PHPUnit + Behat
 	$(MAKE) test
