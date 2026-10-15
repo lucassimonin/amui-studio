@@ -122,7 +122,7 @@ class AppFixtures extends Fixture
                 'primary_link' => '#contact',
                 'secondary_label' => 'Voir les projets',
                 'secondary_link' => '#projets',
-                'stat_value' => '12',
+                'stat_value' => '13',
                 'stat_label' => 'projets livrés',
                 'stat_link' => '#projets',
             ]],
@@ -131,6 +131,14 @@ class AppFixtures extends Fixture
                 'index' => '01',
                 'title' => 'Projets',
                 'projects' => [
+                    [
+                        'image' => '/images/projets/chez-marcel.webp',
+                        'image_alt' => 'Aperçu du site de Chez Marcel, restaurant et glacier à Palavas-les-Flots',
+                        'title' => 'Chez Marcel',
+                        'meta' => 'Restaurant · Glacier · Réservation',
+                        'year' => '',
+                        'url' => 'https://chezmarcel-palavas.fr',
+                    ],
                     [
                         'image' => '/images/projets/restostock.webp',
                         'image_alt' => "Aperçu de RestoStock, application de suivi des coûts et des stocks en restauration",
@@ -289,7 +297,7 @@ class AppFixtures extends Fixture
                 'primary_link' => '#contact',
                 'secondary_label' => 'See projects',
                 'secondary_link' => '#projets',
-                'stat_value' => '12',
+                'stat_value' => '13',
                 'stat_label' => 'projects shipped',
                 'stat_link' => '#projets',
             ]],
@@ -298,6 +306,14 @@ class AppFixtures extends Fixture
                 'index' => '01',
                 'title' => 'Projects',
                 'projects' => [
+                    [
+                        'image' => '/images/projets/chez-marcel.webp',
+                        'image_alt' => 'Preview of Chez Marcel, a restaurant and ice cream parlour in Palavas-les-Flots',
+                        'title' => 'Chez Marcel',
+                        'meta' => 'Restaurant · Ice cream · Booking',
+                        'year' => '',
+                        'url' => 'https://chezmarcel-palavas.fr',
+                    ],
                     [
                         'image' => '/images/projets/restostock.webp',
                         'image_alt' => 'Preview of RestoStock, a food cost and stock tracking web app',
