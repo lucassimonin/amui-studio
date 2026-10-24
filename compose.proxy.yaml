@@ -12,6 +12,10 @@ services:
     build:
       context: .
       target: prod
+      # Toujours retirer l'image de base : sans ça, `--build` réutilise le
+      # frankenphp:1-php8.4 en cache local et rate les correctifs PHP
+      # (ex. php2shell CVE-2026-109618/109619, corrigé dans PHP 8.4.27).
+      pull: true
     restart: unless-stopped
     depends_on:
       database:
