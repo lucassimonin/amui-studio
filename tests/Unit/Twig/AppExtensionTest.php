@@ -22,6 +22,7 @@ class AppExtensionTest extends TestCase
             $em,
             new RequestStack(),
             'fr',
+            'secret-de-test',
         );
     }
 

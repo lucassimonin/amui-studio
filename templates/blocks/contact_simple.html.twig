@@ -37,6 +37,8 @@
                 <input type="hidden" name="block" value="{{ block.id }}">
                 {# Honeypot anti-spam : invisible pour les humains #}
                 <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+                {# Horodatage signé : rejette les envois instantanés (robots) #}
+                <input type="hidden" name="ts" value="{{ contact_stamp() }}">
 
                 {% for message in app.flashes('contact_success') %}
                     <p class="mb-8 border border-ink bg-ink px-4 py-3 text-sm font-semibold text-paper" role="status">{{ message }}</p>

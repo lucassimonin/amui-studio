@@ -24,6 +24,7 @@ class AppExtension extends AbstractExtension
         private readonly EntityManagerInterface $em,
         private readonly RequestStack $requestStack,
         private readonly string $appDefaultLocale,
+        private readonly string $appSecret,
     ) {
     }
 
@@ -38,6 +39,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('page_path', $this->pagePath(...)),
             new TwigFunction('post_path', $this->postPath(...)),
             new TwigFunction('page_translations', $this->pageTranslations(...)),
+            new TwigFunction('contact_stamp', $this->contactStamp(...)),
         ];
     }
 
@@ -47,6 +49,17 @@ class AppExtension extends AbstractExtension
             // "Nom | Prix" par ligne -> [['left' => ..., 'right' => ...], ...]
             new TwigFilter('split_pairs', $this->splitPairs(...)),
         ];
+    }
+
+    /**
+     * Horodatage signé déposé dans le formulaire de contact : permet de rejeter
+     * les envois instantanés (robots) sans gêner un visiteur.
+     */
+    public function contactStamp(): string
+    {
+        $time = time();
+
+        return $time.'.'.substr(hash_hmac('sha256', (string) $time, $this->appSecret), 0, 16);
     }
 
     public function renderBlock(Environment $twig, Block $block): string

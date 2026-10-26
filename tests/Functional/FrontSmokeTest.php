@@ -6,6 +6,15 @@ use App\Entity\ContactMessage;
 
 class FrontSmokeTest extends DatabaseWebTestCase
 {
+    /** Horodatage signé accepté par le formulaire (daté de 10 s pour passer le piège temporel). */
+    private function stamp(): string
+    {
+        $secret = static::getContainer()->getParameter('kernel.secret');
+        $time = time() - 10;
+
+        return $time.'.'.substr(hash_hmac('sha256', (string) $time, $secret), 0, 16);
+    }
+
     public function testHomepageDisplaysHero(): void
     {
         $this->client->request('GET', '/');
@@ -160,6 +169,7 @@ class FrontSmokeTest extends DatabaseWebTestCase
             'name' => 'Robot',
             'email' => 'robot@spam.tld',
             'message' => 'Un message de robot spammeur',
+            'ts' => $this->stamp(),
             'website' => 'https://spam.tld', // honeypot rempli
         ]);
 
@@ -168,6 +178,30 @@ class FrontSmokeTest extends DatabaseWebTestCase
         // Pas de message de succès : la soumission a été ignorée silencieusement
         $this->assertSelectorNotExists('[role="status"]');
         // ... et rien n'est stocké en base
+        $this->assertNull($this->em->getRepository(ContactMessage::class)->findOneBy(['email' => 'robot@spam.tld']));
+    }
+
+    public function testContactRejectsInstantAndFloodedSubmissions(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+        $token = $crawler->filter('input[name="_token"]')->attr('value');
+        $base = [
+            '_token' => $token,
+            'name' => 'Robot',
+            'email' => 'robot@spam.tld',
+            'message' => 'Un message tout à fait ordinaire.',
+            'website' => '',
+        ];
+
+        // Envoi instantané : horodatage absent ou non signé → ignoré
+        $this->client->request('POST', '/_contact', $base + ['ts' => time().'.faux']);
+        $this->assertNull($this->em->getRepository(ContactMessage::class)->findOneBy(['email' => 'robot@spam.tld']));
+
+        // Message criblé de liens → ignoré
+        $this->client->request('POST', '/_contact', array_merge($base, [
+            'ts' => $this->stamp(),
+            'message' => 'https://a.tld https://b.tld https://c.tld',
+        ]));
         $this->assertNull($this->em->getRepository(ContactMessage::class)->findOneBy(['email' => 'robot@spam.tld']));
     }
 
@@ -182,6 +216,7 @@ class FrontSmokeTest extends DatabaseWebTestCase
             'email' => 'jeanne@exemple.fr',
             'subject' => 'Demande d\'information',
             'message' => 'Bonjour, je souhaite obtenir plus d\'informations.',
+            'ts' => $this->stamp(),
             'website' => '',
         ]);
 
