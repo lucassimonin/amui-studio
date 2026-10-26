@@ -30,12 +30,28 @@ class FrontSmokeTest extends DatabaseWebTestCase
         $this->assertCount(0, $crawler->filter('#projets a[href="#"]'));
     }
 
+    public function testOffersSectionListsPackagesAndOptions(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('#formules', '[ 02 ]');
+        $this->assertSelectorTextContains('#formules', 'Press kit');
+        $this->assertSelectorTextContains('#formules', 'One page');
+        // Trois formules, quatre options transversales
+        $this->assertCount(3, $crawler->filter('#formules dl[data-offres] > div'));
+        $this->assertCount(4, $crawler->filter('#formules dl[data-options] > div'));
+        $this->assertSelectorExists('#formules a[href="#contact"]');
+        // Le menu mène à la nouvelle section
+        $this->assertSelectorExists('header a[href="#formules"]');
+    }
+
     public function testAgencySectionShowsSkillsSheet(): void
     {
         $crawler = $this->client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('#agence', '[ 02 ]');
+        $this->assertSelectorTextContains('#agence', '[ 03 ]');
         // Un domaine par ligne, la ponctuation finale de la phrase forte en accent
         $this->assertCount(4, $crawler->filter('#agence dl > div'));
         $this->assertSelectorTextSame('#agence p > span.text-accent', '.');
@@ -46,7 +62,7 @@ class FrontSmokeTest extends DatabaseWebTestCase
         $crawler = $this->client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('#contact', '[ 03 ]');
+        $this->assertSelectorTextContains('#contact', '[ 04 ]');
         // L'email reste un vrai lien mailto, le « @ » est mis en accent
         $this->assertSelectorExists('#contact a[href="mailto:hello@amui.fr"] span.text-accent');
         $this->assertCount(4, $crawler->filter('#contact form label'));
@@ -59,7 +75,7 @@ class FrontSmokeTest extends DatabaseWebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('footer .trema .trema-dots');
         $this->assertSelectorTextSame('footer .sr-only', 'amuï');
-        $this->assertCount(3, $crawler->filter('footer a[href^="#"] span.font-mono'));
+        $this->assertCount(4, $crawler->filter('footer a[href^="#"] span.font-mono'));
         $this->assertSelectorExists('footer a[href="/mentions-legales"]');
         $this->assertSelectorTextContains('footer', 'Haut de page');
     }

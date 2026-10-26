@@ -1,0 +1,69 @@
+<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %} class="border-b border-ink/15">
+    <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pb-28 sm:pt-16">
+
+        {% if data.title %}
+            {% include 'front/_section_head.html.twig' with {index: data.index|default(''), title: data.title, aside: data.intro|default('')} only %}
+        {% endif %}
+
+        {# Une formule par ligne : nom et phrase à gauche, contenu à droite #}
+        {% if data.offers|default([])|length > 0 %}
+            <dl data-offres class="mt-12 border-t border-ink">
+                {% for offer in data.offers %}
+                    <div class="grid grid-cols-1 gap-4 border-b border-ink/10 py-8 lg:grid-cols-12 lg:gap-8">
+                        <dt class="lg:col-span-5">
+                            <div class="font-mono text-[11px] uppercase tracking-wider text-ink/50">
+                                <span class="text-accent">{{ '%02d'|format(loop.index) }}</span>
+                                {% if offer.note|default('') %}· {{ offer.note }}{% endif %}
+                            </div>
+                            <h3 class="mt-2 font-display text-3xl font-black tracking-tight sm:text-4xl">{{ offer.title|default('') }}</h3>
+                            {% if offer.pitch|default('') %}
+                                <p class="mt-2 max-w-sm text-sm leading-relaxed text-ink/70">{{ offer.pitch }}</p>
+                            {% endif %}
+                        </dt>
+
+                        {% set items = offer.items|default('')|split("\n")|map(l => l|trim)|filter(l => l != '') %}
+                        {% if items|length > 0 %}
+                            <dd class="lg:col-span-7">
+                                <ul class="grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
+                                    {% for item in items %}
+                                        <li class="flex items-baseline gap-2.5 text-sm text-ink/80">
+                                            <span class="mt-1 inline-block size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
+                                            {{ item }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </dd>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </dl>
+        {% endif %}
+
+        {# Options transversales #}
+        {% set options = data.options|default('')|split_pairs %}
+        {% if options|length > 0 %}
+            <div class="mt-12">
+                {% if data.options_label|default('') %}
+                    <div class="font-mono text-[11px] uppercase tracking-wider text-ink/50">{{ data.options_label }}</div>
+                {% endif %}
+                <dl data-options class="mt-4 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+                    {% for option in options %}
+                        <div class="border-t border-ink pt-3">
+                            <dt class="font-display text-lg font-black tracking-tight">{{ option.left }}</dt>
+                            <dd class="mt-1 text-sm leading-relaxed text-ink/70">{{ option.right }}</dd>
+                        </div>
+                    {% endfor %}
+                </dl>
+            </div>
+        {% endif %}
+
+        {% if data.cta_label|default('') %}
+            <div class="mt-12">
+                <a href="{{ data.cta_link ?: '#contact' }}"
+                   class="group inline-flex items-center gap-3 border border-ink bg-ink px-5 py-3 text-sm font-semibold text-paper transition-colors duration-200 hover:border-accent hover:bg-accent focus:border-accent focus:bg-accent">
+                    {{ data.cta_label }} <span aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>

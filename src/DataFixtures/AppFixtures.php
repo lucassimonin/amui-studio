@@ -63,6 +63,7 @@ class AppFixtures extends Fixture
     {
         $header = [
             ['Projets', '#projets'],
+            ['Formules', '#formules'],
             ['Agence', '#agence'],
             ['Contact', '#contact'],
         ];
@@ -77,6 +78,7 @@ class AppFixtures extends Fixture
         // Menu de la version anglaise
         $headerEn = [
             ['Projects', '#projets'],
+            ['Packages', '#formules'],
             ['Studio', '#agence'],
             ['Contact', '#contact'],
         ];
@@ -233,9 +235,39 @@ class AppFixtures extends Fixture
                     ],
                 ],
             ]],
+            ['offer_list', [
+                'anchor' => 'formules',
+                'index' => '02',
+                'title' => 'Formules',
+                'intro' => "Trois points de départ, un seul interlocuteur. Chaque formule est livrée en ligne, pas en maquette.",
+                'offers' => [
+                    [
+                        'title' => 'Press kit',
+                        'pitch' => "Une page qui se suffit à elle-même, à envoyer aux programmateurs, à la presse ou aux marques.",
+                        'items' => "Présentation, musique et visuels\nRevue de presse et dates\nContacts booking et management\nVersion carte à envoyer par message\nNom de domaine et mise en ligne",
+                        'note' => 'Livré en une semaine',
+                    ],
+                    [
+                        'title' => 'One page',
+                        'pitch' => "Le site vitrine qui dit l'essentiel : qui vous êtes, ce que vous faites, comment vous joindre.",
+                        'items' => "Design sur mesure, pas de gabarit\nTextes structurés avec vous\nFormulaire de contact anti-spam\nMobile soigné autant que l'ordinateur\nRéférencement de base inclus\nAdministration pour tout modifier",
+                        'note' => 'Livré en deux à trois semaines',
+                    ],
+                    [
+                        'title' => 'Site complet',
+                        'pitch' => "Plusieurs pages, actualités, multilingue : quand le contenu grandit et doit rester tenable.",
+                        'items' => "Pages construites en blocs, à volonté\nActualités et catégories\nFrançais, anglais, et plus si besoin\nBibliothèque d'images intégrée\nRedirections automatiques au changement d'adresse\nFormation à l'administration",
+                        'note' => 'Sur devis',
+                    ],
+                ],
+                'options_label' => 'Et tout ce qui va avec',
+                'options' => "SEO | Mots-clés, données structurées, visibilité locale, suivi des positions.\nIdentité | Logotype, palette, typographies, déclinaisons réseaux.\nContenu | Rédaction, photos, retouches et textes alternatifs.\nMaintenance | Mises à jour, sauvegardes, sécurité et hébergement.",
+                'cta_label' => 'Parler de votre projet',
+                'cta_link' => '#contact',
+            ]],
             ['split_intro', [
                 'anchor' => 'agence',
-                'index' => '02',
+                'index' => '03',
                 'title' => "L'Agence",
                 'subtitle' => 'Studio digital. Direction artistique, design système, front-end créatif.',
                 'statement' => "Le minimalisme au service de l'efficacité.",
@@ -244,7 +276,7 @@ class AppFixtures extends Fixture
             ]],
             ['contact_simple', [
                 'anchor' => 'contact',
-                'index' => '03',
+                'index' => '04',
                 'title' => 'Contact',
                 'text' => "Un message clair, une réponse rapide. Dites-nous ce que vous voulez faire — on vous dira comment le faire bien.",
                 'infos_label' => 'Écrivez-nous',
@@ -408,9 +440,39 @@ class AppFixtures extends Fixture
                     ],
                 ],
             ]],
+            ['offer_list', [
+                'anchor' => 'formules',
+                'index' => '02',
+                'title' => 'Packages',
+                'intro' => 'Three starting points, one person to talk to. Every package ships online, not as a mockup.',
+                'offers' => [
+                    [
+                        'title' => 'Press kit',
+                        'pitch' => 'A single page that stands on its own — for bookers, press and brands.',
+                        'items' => "Bio, music and visuals\nPress coverage and dates\nBooking and management contacts\nCard version to send by message\nDomain name and going live",
+                        'note' => 'Delivered in one week',
+                    ],
+                    [
+                        'title' => 'One page',
+                        'pitch' => 'The showcase site that says what matters: who you are, what you do, how to reach you.',
+                        'items' => "Custom design, no template\nCopy structured with you\nSpam-proof contact form\nMobile as polished as desktop\nBasic SEO included\nBack office to edit everything",
+                        'note' => 'Delivered in two to three weeks',
+                    ],
+                    [
+                        'title' => 'Full website',
+                        'pitch' => 'Several pages, news, multilingual — when content grows and has to stay manageable.',
+                        'items' => "Pages built from blocks, as many as needed\nNews and categories\nFrench, English and more\nBuilt-in media library\nAutomatic redirects when an address changes\nTraining on the back office",
+                        'note' => 'On quote',
+                    ],
+                ],
+                'options_label' => 'And everything that goes with it',
+                'options' => "SEO | Keywords, structured data, local visibility, ranking follow-up.\nBranding | Logotype, palette, typefaces, social media variants.\nContent | Copywriting, photos, retouching and alt text.\nMaintenance | Updates, backups, security and hosting.",
+                'cta_label' => 'Tell us about your project',
+                'cta_link' => '#contact',
+            ]],
             ['split_intro', [
                 'anchor' => 'agence',
-                'index' => '02',
+                'index' => '03',
                 'title' => 'The Studio',
                 'subtitle' => 'Digital studio. Art direction, design systems, creative front-end.',
                 'statement' => 'Minimalism in the service of efficiency.',
@@ -419,7 +481,7 @@ class AppFixtures extends Fixture
             ]],
             ['contact_simple', [
                 'anchor' => 'contact',
-                'index' => '03',
+                'index' => '04',
                 'title' => 'Contact',
                 'text' => "A clear message, a quick reply. Tell us what you want to do — we'll tell you how to do it well.",
                 'infos_label' => 'Write to us',
