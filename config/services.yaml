@@ -6,6 +6,11 @@ parameters:
     app.default_locale: 'fr'
     # Motif de route pour les langues NON par défaut (ex: 'en|de')
     app.extra_locales_pattern: 'en'
+    # Délai minimum entre l'affichage du formulaire de contact et son envoi :
+    # en dessous, c'est un robot. Mis à 0 en test (envois instantanés).
+    app.contact_min_seconds: 3
+    # Envois autorisés par heure et par IP sur le formulaire (large en test)
+    app.contact_rate_limit: 5
 
 services:
     _defaults:
@@ -15,6 +20,7 @@ services:
             $appLocales: '%app.locales%'
             $appDefaultLocale: '%app.default_locale%'
             $appSecret: '%kernel.secret%'
+            $contactMinSeconds: '%app.contact_min_seconds%'
 
     _instanceof:
         App\Block\BlockTypeInterface:
@@ -34,3 +40,8 @@ services:
     App\EventListener\SlugHistoryListener:
         tags:
             - { name: doctrine.event_listener, event: onFlush }
+
+when@test:
+    parameters:
+        app.contact_min_seconds: 0
+        app.contact_rate_limit: 1000

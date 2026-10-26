@@ -4,5 +4,5 @@ framework:
         # Un visiteur légitime en envoie un ; un robot en tente des dizaines.
         contact:
             policy: 'sliding_window'
-            limit: 5
+            limit: '%app.contact_rate_limit%'
             interval: '1 hour'
