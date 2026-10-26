@@ -25,6 +25,7 @@ class ContactController extends AbstractController
         EntityManagerInterface $em,
         RateLimiterFactoryInterface $contactLimiter,
         #[\SensitiveParameter] string $appSecret = '',
+        int $contactMinSeconds = 3,
     ): Response {
         $redirect = new RedirectResponse(($request->headers->get('referer') ?: '/').'#contact');
 
@@ -41,13 +42,19 @@ class ContactController extends AbstractController
 
         // Piège temporel : un robot poste dans la seconde, un humain met au moins
         // quelques secondes à remplir. L'horodatage est signé pour ne pas être forgé.
-        if (!$this->stampIsPlausible((string) $request->request->get('ts', ''), $appSecret)) {
+        if (!$this->stampIsPlausible((string) $request->request->get('ts', ''), $appSecret, $contactMinSeconds)) {
             return $redirect;
         }
 
-        // 5 envois par heure et par adresse IP
-        $limiter = $contactLimiter->create($request->getClientIp() ?? 'inconnu');
-        if (!$limiter->consume()->isAccepted()) {
+        // 5 envois par heure et par adresse IP. En cas de panne du compteur
+        // (stockage indisponible), on laisse passer plutôt que bloquer un client.
+        try {
+            $accepted = $contactLimiter->create($request->getClientIp() ?? 'inconnu')->consume()->isAccepted();
+        } catch (\Throwable) {
+            $accepted = true;
+        }
+
+        if (!$accepted) {
             $this->addFlash('contact_error', 'Trop de demandes envoyées depuis cette connexion. Réessayez dans une heure.');
 
             return $redirect;
@@ -106,8 +113,8 @@ class ContactController extends AbstractController
         return $redirect;
     }
 
-    /** Horodatage signé par contact_stamp() : signature valide, et âge entre 3 secondes et 24 heures. */
-    private function stampIsPlausible(string $stamp, string $appSecret): bool
+    /** Horodatage signé par contact_stamp() : signature valide, et âge plausible. */
+    private function stampIsPlausible(string $stamp, string $appSecret, int $minSeconds): bool
     {
         if ('' === $appSecret) {
             return true; // pas de secret injecté (tests unitaires) : on ne bloque pas
@@ -122,6 +129,6 @@ class ContactController extends AbstractController
 
         $age = time() - (int) $time;
 
-        return $age >= 3 && $age <= 86400;
+        return $age >= $minSeconds && $age <= 86400;
     }
 }
