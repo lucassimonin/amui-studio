@@ -33,7 +33,7 @@ class FrontSmokeTest extends DatabaseWebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('#projets', '[ 01 ]');
-        $this->assertCount(18, $crawler->filter('#projets h3'));
+        $this->assertCount(20, $crawler->filter('#projets h3'));
         $this->assertSelectorExists('#projets a[href="https://dj-noma.netlify.app"][target="_blank"]');
         // Les projets sans vrai lien (« # ») ne sont pas cliquables
         $this->assertCount(0, $crawler->filter('#projets a[href="#"]'));
