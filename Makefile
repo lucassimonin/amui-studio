@@ -6,7 +6,7 @@ PHP=symfony php
 TEST_PHP=php
 DOCKER=docker compose
 
-.PHONY: up stop logs install clean db.init db.fixture db.clean db.reset \
+.PHONY: up stop logs install clean db.init db.fixture db.clean db.reset prod.content \
         asset.build asset.watch test test.unit test.functional behat test.all \
         lint cc prod.build prod.up prod.down prod.logs prod.shell prod.deploy
 
@@ -110,6 +110,23 @@ prod.logs: ## Logs de la prod
 
 prod.shell: ## Shell dans le conteneur app
 	$(PROD_COMPOSE) exec app sh
+
+prod.content: ## Synchronise le contenu depuis les fixtures (préserve comptes, messages, médias, redirections)
+	@mkdir -p sauvegardes
+	@STAMP=$$(date +%Y%m%d-%H%M%S); \
+	echo "→ Sauvegarde complète de la base"; \
+	$(PROD_COMPOSE) exec -T database sh -c 'mysqldump -uroot -p"$$MYSQL_ROOT_PASSWORD" --single-transaction --routines "$$MYSQL_DATABASE"' > sauvegardes/avant-contenu-$$STAMP.sql; \
+	test $$(wc -c < sauvegardes/avant-contenu-$$STAMP.sql) -gt 1000 || { echo "Sauvegarde vide : rien n'a été modifié."; exit 1; }; \
+	echo "   sauvegardes/avant-contenu-$$STAMP.sql ($$(wc -c < sauvegardes/avant-contenu-$$STAMP.sql) octets)"; \
+	echo "→ Mise de côté des données qui n'appartiennent pas aux fixtures"; \
+	$(PROD_COMPOSE) exec -T database sh -c 'mysqldump -uroot -p"$$MYSQL_ROOT_PASSWORD" --single-transaction "$$MYSQL_DATABASE" user contact_message media redirect' > sauvegardes/a-preserver-$$STAMP.sql; \
+	test $$(wc -c < sauvegardes/a-preserver-$$STAMP.sql) -gt 500 || { echo "Export vide : rien n'a été modifié."; exit 1; }; \
+	echo "→ Rechargement des pages et réglages"; \
+	$(PROD_COMPOSE) exec -T app php bin/console doctrine:fixtures:load --no-interaction; \
+	echo "→ Restauration des comptes, messages, médias et redirections"; \
+	$(PROD_COMPOSE) exec -T database sh -c 'mysql -uroot -p"$$MYSQL_ROOT_PASSWORD" "$$MYSQL_DATABASE"' < sauvegardes/a-preserver-$$STAMP.sql; \
+	$(PROD_COMPOSE) exec -T app php bin/console cache:clear; \
+	echo "✓ Contenu synchronisé"
 
 prod.deploy: ## Déploiement : git pull + rebuild + assets + schéma DB + cache + nettoyage
 	@echo "→ Récupération du code…"

@@ -37,5 +37,19 @@ jobs:
             docker network create web 2>/dev/null || true
             echo "→ Déploiement amuï studio (make prod.deploy, fichier: $COMPOSE_FILE)"
             make prod.deploy PROD_FILE="$COMPOSE_FILE"
+
+            # Contenu : rejoué seulement quand CONTENT_VERSION change dans le dépôt.
+            # Les pages et réglages repartent des fixtures ; comptes, messages reçus,
+            # médias et redirections sont mis de côté puis restaurés (voir make prod.content).
+            VOULUE=$(cat CONTENT_VERSION 2>/dev/null || echo "")
+            DEPLOYEE=$(cat .content-version-deployed 2>/dev/null || echo "")
+            if [ -n "$VOULUE" ] && [ "$VOULUE" != "$DEPLOYEE" ]; then
+              echo "→ Synchronisation du contenu ($DEPLOYEE → $VOULUE)"
+              make prod.content PROD_FILE="$COMPOSE_FILE"
+              printf '%s' "$VOULUE" > .content-version-deployed
+            else
+              echo "→ Contenu inchangé ($VOULUE)"
+            fi
+
             echo "✓ Déploiement terminé"
 
